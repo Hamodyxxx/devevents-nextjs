@@ -43,11 +43,11 @@ async function dbConnect(): Promise<Mongoose> {
 
     if (!cached.promise) {
         const opts = {
-        bufferCommands: false, 
+            bufferCommands: false, 
         };
 
         cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongooseInstance) => {
-        return mongooseInstance;
+            return mongooseInstance;
         });
     }
 

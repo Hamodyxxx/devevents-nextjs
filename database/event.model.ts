@@ -126,7 +126,7 @@ EventSchema.pre('save', async function (next) {
   if (event.isModified('time')) {
     event.time = normalizeTime(event.time);
   }
-  
+
 });
 
 // Helper function to generate URL-friendly slug
@@ -164,7 +164,7 @@ function normalizeDate(dateString: string): string {
 
   return value;
 }
-}
+
 
 // Helper function to normalize time format
 function normalizeTime(timeString: string): string {
