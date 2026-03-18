@@ -1,39 +1,29 @@
-import Event from "@/database/event.model";
-import { compose } from "@/lib/middlewares/compose";
-import { withErrorHandler } from "@/lib/middlewares/with-error-handler";
-import dbConnect from "@/lib/mongo";
+import { AppError } from "@/lib/app-error";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
+import { createEventService } from "@/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = compose(
-    withErrorHandler((e) => ({
-        message: "Event Creation Failed",
-        data: {
-            error: e instanceof Error ? e.message : "unknown"
+export const POST = async (req: NextRequest) => {
+
+    const formDataRes = await tryCatch(req.formData());
+    if(formDataRes.error) return NextResponse.json({
+        message: "body should be of type formdata"
+    }, { status: 400 });
+
+    const eventResult = await tryCatch(createEventService(formDataRes.data));
+
+    if(eventResult.error) {
+        if (eventResult.error instanceof AppError) {
+            return NextResponse.json({ message: eventResult.error.message }, { status: eventResult.error.statusCode });
         }
-    })),
-    async (req: NextRequest, _) => {
-        await dbConnect();
-
-        const formData = await req.formData();
-
-        const {
-            data: eventData,
-            error
-        } = tryCatchSync(() => Object.fromEntries(formData));
-
-        if(error) return NextResponse.json({
-            message: "Invalid JSON data format"
-        }, { status: 400 });
-
-        const createdEvent = await Event.create(eventData);
-
-        return NextResponse.json({
-            message: "Event Created Successfully",
-            data: {
-                event: createdEvent
-            }
-        }, { status: 201 });
-
+        return NextResponse.json({ message: "Server Error" }, { status: 500 });
     }
-);
+
+    return NextResponse.json({
+        message: "Event Created Successfully",
+        data: {
+            event: eventResult.data
+        }
+    }, { status: 201 });
+
+}
