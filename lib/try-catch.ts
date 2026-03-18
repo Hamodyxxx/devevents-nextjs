@@ -1,0 +1,61 @@
+type Success<T> = {
+    data: T,
+    error: null
+}
+
+type Failure<E> = {
+    data: null,
+    error: E
+}
+
+type Result<T, E = Error> = Success<T> | Failure<E>;
+
+export const tryCatch = async <T, E = Error>(
+    promise: Promise<T>,
+    errorsToCatch?: E[]
+): Promise<Result<T, E>> => {
+    try {
+        const data = await promise;
+        return {
+            data,
+            error: null
+        };
+    } catch (error) {
+        if(errorsToCatch === undefined) return {
+            data: null,
+            error: error as E
+        }
+
+        if(errorsToCatch.some((e) => error instanceof (e as any))) return {
+            data: null,
+            error: error as E
+        }
+
+        throw error;
+    }
+}
+
+export const tryCatchSync = <T, E = Error>(
+    callback: () => T,
+    errorsToCatch?: E[]
+): Result<T, E> => {
+    try {
+        const data = callback();
+        return {
+            data,
+            error: null
+        };
+    } catch (error) {
+        if(errorsToCatch === undefined) return {
+            data: null,
+            error: error as E
+        }
+
+        if(errorsToCatch.some((e) => error instanceof (e as any))) return {
+            data: null,
+            error: error as E
+        }
+
+        throw error;
+    }
+}
