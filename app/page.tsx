@@ -1,6 +1,7 @@
 import EventCard from "@/components/event-card";
 import ExploreBtn from "@/components/explore-btn";
 import GridView from "@/components/grid-view";
+import Heading from "@/components/heading";
 import { BASE_URL } from "@/constants/base-url";
 import { IEvent } from "@/database";
 
@@ -9,9 +10,9 @@ const Page = async () => {
 
   return (
     <section>
-      <h1 className="text-center text-gradient max-sm:text-4xl text-6xl">
+      <Heading className="text-center">
         The Hub for Every Dev <br/> Event You Can't Miss
-      </h1>
+      </Heading>
       <p className="text-center mt-5">Hackathons, Meetups, and Conferences, All In One Place</p>
 
       <ExploreBtn/>
