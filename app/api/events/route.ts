@@ -1,6 +1,6 @@
 import { AppError } from "@/lib/app-error";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
-import { createEventService } from "@/services/events.service";
+import { createEventService, getAllEventsService } from "@/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -13,10 +13,11 @@ export const POST = async (req: NextRequest) => {
     const eventResult = await tryCatch(createEventService(formDataRes.data));
 
     if(eventResult.error) {
+        console.log(eventResult.error);
         if (eventResult.error instanceof AppError) {
             return NextResponse.json({ message: eventResult.error.message }, { status: eventResult.error.statusCode });
         }
-        return NextResponse.json({ message: "Server Error" }, { status: 500 });
+        return NextResponse.json({ message: eventResult.error.message || "Server Error" }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -26,4 +27,23 @@ export const POST = async (req: NextRequest) => {
         }
     }, { status: 201 });
 
+}
+
+
+export const GET = async () => {
+    const eventsRes = await tryCatch(getAllEventsService());
+
+    if(eventsRes.error) {
+        if (eventsRes.error instanceof AppError) {
+            return NextResponse.json({ message: eventsRes.error.message }, { status: eventsRes.error.statusCode });
+        }
+        return NextResponse.json({ message: eventsRes.error.message || "Server Error" }, { status: 500 });
+    }
+
+    return NextResponse.json({
+        message: "Events Listed Successfully",
+        data: {
+            events: eventsRes.data 
+        }
+    }, { status: 200 })
 }

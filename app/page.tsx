@@ -1,9 +1,12 @@
 import EventCard from "@/components/event-card";
 import ExploreBtn from "@/components/explore-btn";
 import GridView from "@/components/grid-view";
-import { events } from "@/lib/constants";
+import { BASE_URL } from "@/constants/base-url";
+import { IEvent } from "@/database";
 
-const Page = () => {
+const Page = async () => {
+  const { data: {events} } = await (await fetch(`${BASE_URL}/api/events`)).json() as { data: { events: IEvent[]}};
+
   return (
     <section>
       <h1 className="text-center text-gradient max-sm:text-4xl text-6xl">

@@ -1,5 +1,5 @@
-import Event from "@/database/event.model";
-import { BadRequestError } from "@/lib/app-error";
+import Event, { IEvent } from "@/database/event.model";
+import { AppError, BadRequestError, NotFoundError } from "@/lib/app-error";
 import dbConnect from "@/lib/mongo";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
 import { v2 } from "cloudinary";
@@ -28,9 +28,30 @@ export async function createEventService(
 
     if(createdEventResult.error) {
         await tryCatch(v2.uploader.destroy(uploadResult.public_id));
-        throw new Error("Couldn't create event")
+        throw createdEventResult.error;
     };
 
 
     return createdEventResult.data;
+}
+
+export async function getAllEventsService() {
+    await dbConnect();
+
+    const eventsRes = await tryCatch(Event.find().sort({createdAt: -1}));
+
+    if(eventsRes.error) throw new Error();
+
+    return eventsRes.data;
+}
+
+export async function getEventBySlug(slug: string) {
+    await dbConnect();
+
+    const eventsRes = await tryCatch(Event.findOne({slug}) as Promise<IEvent | null>);
+
+    if(eventsRes.error) throw new Error();
+    if(!eventsRes.data) throw new NotFoundError("There is no Event with this Slug");
+
+    return eventsRes.data;
 }
