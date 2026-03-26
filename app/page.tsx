@@ -4,9 +4,23 @@ import GridView from "@/components/grid-view";
 import Heading from "@/components/heading";
 import { BASE_URL } from "@/constants/base-url";
 import { IEvent } from "@/database";
+import { IResponse } from "@/types/response";
+import { notFound } from "next/navigation";
+
+const getEvents = async () => {
+  const res = await fetch(`${BASE_URL}/api/events`);
+  const data = await res.json();
+  return data as IResponse<{
+    events: IEvent[]
+  }>
+}
 
 const Page = async () => {
-  const { data: {events} } = await (await fetch(`${BASE_URL}/api/events`)).json() as { data: { events: IEvent[]}};
+  const { data } = await getEvents();
+
+  if(!data) return notFound();
+
+  const { events } = data;
 
   return (
     <section>

@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
     const eventResult = await tryCatch(createEventService(formDataRes.data));
 
     if(eventResult.error) {
-        console.log(eventResult.error);
+        console.error("Event creation failed:", eventResult.error.message);
         if (eventResult.error instanceof AppError) {
             return NextResponse.json({ message: eventResult.error.message }, { status: eventResult.error.statusCode });
         }

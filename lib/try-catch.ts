@@ -10,9 +10,20 @@ type Failure<E> = {
 
 type Result<T, E = Error> = Success<T> | Failure<E>;
 
-export const tryCatch = async <T, E = Error>(
+
+export function tryCatch<T, E = Error>(handler: (() => T), errorsToCatch?: ErrorConstructor[]): Result<T, E>;
+export function tryCatch<T, E = Error>(handler: Promise<T>, errorsToCatch?: ErrorConstructor[]): Promise<Result<T, E>>;
+export function tryCatch<T, E = Error>(
+    handler: Promise<T> | (() => T),
+    errorsToCatch?: ErrorConstructor[]
+): Promise<Result<T, E>> | Result<T, E>  {
+    if(typeof handler === "function") return tryCatchSync(handler, errorsToCatch);
+    return tryCatchAsync(handler, errorsToCatch);
+}
+
+export const tryCatchAsync = async <T, E = Error>(
     promise: Promise<T>,
-    errorsToCatch?: E[]
+    errorsToCatch?: ErrorConstructor[]
 ): Promise<Result<T, E>> => {
     try {
         const data = await promise;
@@ -37,7 +48,7 @@ export const tryCatch = async <T, E = Error>(
 
 export const tryCatchSync = <T, E = Error>(
     callback: () => T,
-    errorsToCatch?: E[]
+    errorsToCatch?: ErrorConstructor[]
 ): Result<T, E> => {
     try {
         const data = callback();

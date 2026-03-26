@@ -1,12 +1,12 @@
 import { AppError } from "@/lib/app-error";
 import { tryCatch } from "@/lib/try-catch";
-import { getEventBySlugService } from "@/services/events.service";
+import {  getSimilarEventsBySlugService } from "@/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
 
-    const eventsRes = await tryCatch(getEventBySlugService(slug));
+    const eventsRes = await tryCatch(getSimilarEventsBySlugService(slug));
 
     if(eventsRes.error) {
         if (eventsRes.error instanceof AppError) {
@@ -16,9 +16,9 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ slug
     }
 
     return NextResponse.json({
-        message: "Event Found Successfully",
+        message: "Found Similar Events",
         data: {
-            event: eventsRes.data 
+            events: eventsRes.data 
         }
     }, { status: 200 })
 }
