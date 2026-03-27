@@ -1,5 +1,5 @@
 import Event, { IEvent } from "@/database/event.model";
-import { AppError, BadRequestError, NotFoundError } from "@/lib/app-error";
+import { AppError, BadRequestError, NotFoundError } from "@/lib/errors/app-error";
 import dbConnect from "@/lib/mongo";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
 import { v2 } from "cloudinary";

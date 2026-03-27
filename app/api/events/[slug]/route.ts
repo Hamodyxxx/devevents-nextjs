@@ -1,24 +1,16 @@
-import { AppError } from "@/lib/app-error";
-import { tryCatch } from "@/lib/try-catch";
+import { withErrorHandlerApi } from "@/lib/errors/with-error-handler";
 import { getEventBySlugService } from "@/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest, { params }: { params: Promise<{ slug: string }> }) => {
+export const GET = withErrorHandlerApi(async (req: NextRequest, { params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
 
-    const eventsRes = await tryCatch(getEventBySlugService(slug));
-
-    if(eventsRes.error) {
-        if (eventsRes.error instanceof AppError) {
-            return NextResponse.json({ message: eventsRes.error.message }, { status: eventsRes.error.statusCode });
-        }
-        return NextResponse.json({ message: eventsRes.error.message || "Server Error" }, { status: 500 });
-    }
+    const event = await getEventBySlugService(slug);
 
     return NextResponse.json({
         message: "Event Found Successfully",
         data: {
-            event: eventsRes.data 
+            event 
         }
     }, { status: 200 })
-}
+});

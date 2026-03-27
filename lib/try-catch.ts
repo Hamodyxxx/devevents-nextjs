@@ -46,7 +46,7 @@ export const tryCatchAsync = async <T, E = Error>(
     }
 }
 
-export const tryCatchSync = <T, E = Error>(
+export const tryCatchSync = <T, E = Error>( 
     callback: () => T,
     errorsToCatch?: ErrorConstructor[]
 ): Result<T, E> => {
