@@ -1,9 +1,9 @@
-import { Event } from "@/types/event"
+import { IEvent } from "@/database";
 import Image from "next/image";
 import Link from "next/link";
 
 interface EventCardProps {
-    event: Event;
+    event: IEvent;
 }
 
 const EventCard = ({

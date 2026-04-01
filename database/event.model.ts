@@ -15,6 +15,7 @@ export interface IEvent extends Document {
   agenda: string[];
   organizer: string;
   tags: string[];
+  bookingCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -101,6 +102,10 @@ const EventSchema = new Schema<IEvent>(
         validator: (v: string[]) => v.length > 0,
         message: 'At least one tag is required',
       },
+    },
+    bookingCount: {
+      type: Number,
+      default: 0,
     },
   },
   {
@@ -192,9 +197,6 @@ function normalizeTime(timeString: string): string {
   
   return `${hours.toString().padStart(2, '0')}:${minutes}`;
 }
-
-// Create unique index on slug for better performance
-EventSchema.index({ slug: 1 }, { unique: true });
 
 // Create compound index for common queries
 EventSchema.index({ date: 1, mode: 1 });
