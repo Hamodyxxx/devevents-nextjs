@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/mongo';
 import Booking, { IBooking } from '@/database/booking.model';
+import Event from '@/database/event.model';
 import { BadRequestError } from '@/lib/errors/app-error';
 import mongoose from 'mongoose';
 
@@ -21,5 +22,8 @@ export async function createBookingByEmailService({ eventId, email }: CreateBook
   }
 
   const newBooking = await Booking.create({ eventId, email });
+  
+  await Event.findByIdAndUpdate(eventId, { $inc: { bookingCount: 1 } });
+
   return newBooking as IBooking;
 }

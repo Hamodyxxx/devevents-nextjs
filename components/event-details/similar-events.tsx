@@ -2,6 +2,7 @@ import { BASE_URL } from '@/constants/base-url'
 import { IEvent } from '@/database';
 import React from 'react'
 import EventCard from '../event-card';
+import { cacheLife, cacheTag } from 'next/cache';
 
 const getSimilarEvents = async (slug: string) => {
     const res = await fetch(`${BASE_URL}/api/events/${slug}/similar`);
@@ -17,7 +18,13 @@ interface SimilarEventsProps {
 const SimilarEvents = async ({
     slug
 }: SimilarEventsProps) => {
+    "use cache";
+    cacheTag(`similar-events-${slug}`)
+    cacheLife("hours");
+
     const events = await getSimilarEvents(slug);
+
+    if (events.length === 0) return null;
 
     return (
         <div className="flex w-full flex-col gap-4 pt-20">

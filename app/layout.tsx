@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import LightRays from "@/components/LightRays";
 import Navbar from "@/components/navbar";
+import Providers from "@/components/providers";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -32,28 +33,30 @@ export default function RootLayout({
       <body
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased min-h-screen`}
       >
-      <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
-        <LightRays
-          raysOrigin="top-center-offset"
-          raysColor="#5dfeca"
-          raysSpeed={0.5}
-          lightSpread={0.1}
-          rayLength={15}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0}
-          distortion={0}
-          pulsating={false}
-          fadeDistance={1}
-          saturation={1}
-      />
-      </div>
+        <Providers>
+          <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
+            <LightRays
+              raysOrigin="top-center-offset"
+              raysColor="#5dfeca"
+              raysSpeed={0.5}
+              lightSpread={0.1}
+              rayLength={15}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0}
+              distortion={0}
+              pulsating={false}
+              fadeDistance={1}
+              saturation={1}
+            />
+          </div>
 
-      <Navbar/>
+          <Navbar/>
 
-      <main>
-        {children}
-      </main>
+          <main>
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );

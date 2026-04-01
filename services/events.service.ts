@@ -4,6 +4,7 @@ import dbConnect from "@/lib/mongo";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
 import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
+import { revalidateTag } from "next/cache";
 
 export async function createEventService(
     eventData: FormData
@@ -34,7 +35,6 @@ export async function createEventService(
         await tryCatch(v2.uploader.destroy(uploadResult.public_id));
         throw createdEventResult.error;
     };
-
 
     return createdEventResult.data;
 }

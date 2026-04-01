@@ -2,7 +2,11 @@
 import { useState } from "react";
 import BookEventForm from "./book-event-form";
 
-const BookEvent = () => {
+interface BookEventProps {
+    event: any;
+}
+
+const BookEvent = ({ event }: BookEventProps) => {
     const [submitted, setSubmitted] = useState(false);
 
     return (
@@ -11,11 +15,11 @@ const BookEvent = () => {
                 submitted ? (
                     <p>Thank You for signing up</p>
                 ) : (
-                    <BookEventForm onSubmit={() => setSubmitted(true)}/>
+                    <BookEventForm event={event} onSubmit={() => setSubmitted(true)}/>
                 )
             }
         </div>
     )
 }
 
-export default BookEvent
+export default BookEvent;

@@ -1,18 +1,41 @@
 import React, { useRef, useState } from "react"
+import { useMutation } from "@tanstack/react-query"
 
 interface BookEventFormProps {
+    event: any;
     onSubmit?: () => void
 }
 
 const BookEventForm = ({
+    event,
     onSubmit
 }: BookEventFormProps) => {
-    const email = useRef("");
+    const emailRef = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = (e: React.SubmitEvent) => {
+    const {error, mutate, isPending} = useMutation({
+        mutationFn: async (email: string) => {
+            const res = await fetch("/api/bookings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ eventId: event._id, email }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.message || data.error || "Failed to book event");
+            }
+            return data;
+        },
+        onSuccess: () => {
+            onSubmit?.();
+        },
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        onSubmit?.();
+        const email = emailRef.current?.value;
+        if (email) {
+            mutate(email);
+        }
     }
 
 
@@ -22,15 +45,19 @@ const BookEventForm = ({
                 <label htmlFor="email">Email Address</label>
                 <input
                     type="email"
-                    value={email.current}
-                    onChange={(e) => email.current = e.target.value}
+                    ref={emailRef}
                     id="email"
                     placeholder="Enter your email address"
                     required
+                    disabled={isPending}
                 />
             </div>
 
-            <button type="submit" className="button-submit">Submit</button>
+            {error?.message && <p className="text-sm mt-1 mb-2 text-[#fb3b53]">{error?.message}</p>}
+
+            <button type="submit" className="button-submit" disabled={isPending}>
+                {isPending ? "Submitting..." : "Submit"}
+            </button>
         </form>
     )
 }
