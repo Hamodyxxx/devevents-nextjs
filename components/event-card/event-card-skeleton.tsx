@@ -1,5 +1,3 @@
-import GridView from "./grid-view";
-
 export const EventCardSkeleton = () => {
   return (
     <div className="flex flex-col gap-3">
@@ -30,18 +28,4 @@ export const EventCardSkeleton = () => {
   );
 };
 
-const FeaturedEventsSkeleton = () => {
-  return (
-    <div className="mt-20 space-y-7">
-      <h3>Featured Events</h3>
-
-      <GridView num={3} className="gap-10">
-        <EventCardSkeleton />
-        <EventCardSkeleton />
-        <EventCardSkeleton />
-      </GridView>
-    </div>
-  );
-};
-
-export default FeaturedEventsSkeleton;
+export default EventCardSkeleton;

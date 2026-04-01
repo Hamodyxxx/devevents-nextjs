@@ -1,5 +1,5 @@
-import EventDetailsContent from '@/components/event-details-content';
-import EventDetailsContentSkeleton from '@/components/event-details-content-skeleton';
+import EventDetailsContent from '@/components/event-details-content/event-details-content';
+import EventDetailsContentSkeleton from '@/components/event-details-content/event-details-content-skeleton';
 import { cacheLife } from 'next/cache';
 import { Suspense } from 'react';
 

@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import LightRays from "@/components/LightRays";
 import Navbar from "@/components/navbar";
-import Providers from "@/components/providers";
+import AppProvider from "@/providers/app-provider/app-provider";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -33,7 +33,7 @@ export default function RootLayout({
       <body
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased min-h-screen`}
       >
-        <Providers>
+        <AppProvider>
           <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
             <LightRays
               raysOrigin="top-center-offset"
@@ -56,7 +56,7 @@ export default function RootLayout({
           <main>
             {children}
           </main>
-        </Providers>
+        </AppProvider>
       </body>
     </html>
   );

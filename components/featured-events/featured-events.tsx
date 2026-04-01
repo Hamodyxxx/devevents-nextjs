@@ -1,9 +1,9 @@
-import GridView from './grid-view';
+import GridView from '../grid-view';
 import { BASE_URL } from '@/constants/base-url';
 import { IResponse } from '@/types/response';
 import { IEvent } from '@/database';
 import { notFound } from 'next/navigation';
-import EventCard from './event-card';
+import EventCard from '../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
 
 

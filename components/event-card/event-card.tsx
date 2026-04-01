@@ -32,8 +32,6 @@ const EventCard = ({
             <p>{event.time}</p>
           </div>
         </div>
-
-
     </Link>
   )
 }

@@ -1,4 +1,4 @@
-import { EventCardSkeleton } from "@/components/featured-events-skeleton";
+import EventCardSkeleton from "@/components/event-card/event-card-skeleton";
 
 const SimilarEventsSkeleton = () => {
   return (

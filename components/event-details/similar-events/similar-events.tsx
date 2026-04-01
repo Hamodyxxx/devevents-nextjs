@@ -1,7 +1,7 @@
 import { BASE_URL } from '@/constants/base-url'
 import { IEvent } from '@/database';
 import React from 'react'
-import EventCard from '../event-card';
+import EventCard from '../../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
 
 const getSimilarEvents = async (slug: string) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import SimilarEventsSkeleton from './event-details/similar-events-skeleton';
+import SimilarEventsSkeleton from '../event-details/similar-events/similar-events-skeleton';
 
 const EventDetailsContentSkeleton = () => {
     return (
