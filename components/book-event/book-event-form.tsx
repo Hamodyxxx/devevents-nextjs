@@ -1,8 +1,12 @@
 import React, { useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
+import { useBookEventMutation } from "@/hooks/use-book-event-mutation";
+import { IEvent } from "@/database";
+import posthog from "posthog-js";
+import { posthogClient } from "@/instrumation-client";
 
 interface BookEventFormProps {
-    event: any;
+    event: IEvent;
     onSubmit?: () => void
 }
 
@@ -12,22 +16,10 @@ const BookEventForm = ({
 }: BookEventFormProps) => {
     const emailRef = useRef<HTMLInputElement>(null);
 
-    const {error, mutate, isPending} = useMutation({
-        mutationFn: async (email: string) => {
-            const res = await fetch("/api/bookings", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ eventId: event._id, email }),
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.message || data.error || "Failed to book event");
-            }
-            return data;
-        },
-        onSuccess: () => {
-            onSubmit?.();
-        },
+    const {error, mutate, isPending} = useBookEventMutation({
+        eventId: event._id as unknown as string, 
+        eventSlug: event.slug,
+        onSuccess: onSubmit
     });
 
     const handleSubmit = (e: React.FormEvent) => {

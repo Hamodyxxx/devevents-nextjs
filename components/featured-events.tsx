@@ -5,7 +5,6 @@ import { IEvent } from '@/database';
 import { notFound } from 'next/navigation';
 import EventCard from './event-card';
 import { cacheLife, cacheTag } from 'next/cache';
-import { wait } from '@/lib/wait';
 
 
 const getEvents = async () => {
