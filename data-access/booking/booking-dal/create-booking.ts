@@ -1,7 +1,6 @@
 import type { ClientSession } from 'mongoose';
 
 import Booking from '@/database/booking.model';
-
 import {
   CreateBookingInputSchema,
   type CreateBookingInput,

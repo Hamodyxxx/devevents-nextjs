@@ -10,6 +10,7 @@ export async function incrementEventBookingCount(
   delta: number,
   session?: ClientSession
 ): Promise<EventDto | null> {
+
   const parsedId = ObjectIdStringSchema.parse(eventId);
   const doc = await Event.findByIdAndUpdate(
     parsedId,
