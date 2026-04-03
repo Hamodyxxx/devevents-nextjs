@@ -3,10 +3,10 @@ import type { IBooking } from '@/database/booking.model';
 import { BookingDtoSchema, type BookingDto } from './booking.dto';
 
 /**
- * Convert a booking database document into a validated BookingDto.
+ * Convert a booking database document into a validated data transfer object.
  *
- * @param doc - The booking database document to convert (contains Mongo-style ObjectIds and Date fields)
- * @returns A BookingDto with `id` and `eventId` as strings, `createdAt`/`updatedAt` as ISO timestamp strings, and `email` preserved
+ * @param doc - The booking database document containing Mongo-style ObjectIds and Date fields
+ * @returns A BookingDto whose `id` and `eventId` are strings, `createdAt` and `updatedAt` are ISO 8601 timestamp strings, and `email` is preserved
  */
 export function mapBookingToDto(doc: IBooking): BookingDto {
   const dto: BookingDto = {

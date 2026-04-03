@@ -21,7 +21,7 @@ function Dialog({
 }
 
 /**
- * Wraps the Radix Dialog Trigger and injects a `data-slot="dialog-trigger"` attribute while forwarding all props.
+ * Renders a Radix dialog trigger with a standardized `data-slot="dialog-trigger"` attribute.
  *
  * @returns A `DialogPrimitive.Trigger` element with `data-slot="dialog-trigger"` and the provided props applied.
  */
@@ -44,7 +44,7 @@ function DialogPortal({
 }
 
 /**
- * Renders a Radix `DialogPrimitive.Close` with a standardized `data-slot="dialog-close"`.
+ * Render a Radix `DialogPrimitive.Close` with the `data-slot="dialog-close"` attribute.
  *
  * @returns A `DialogPrimitive.Close` element with the provided props and `data-slot="dialog-close"`.
  */
@@ -78,11 +78,11 @@ function DialogOverlay({
 }
 
 /**
- * Renders dialog content inside a portal with an overlay and an optional close button.
+ * Render dialog content inside a portal with an overlay and an optional built-in close button.
  *
  * @param className - Additional CSS classes appended to the dialog content container.
- * @param showCloseButton - Whether to render the top-right close icon button; defaults to `true`.
- * @returns The rendered dialog content element (wrapped in a portal and overlay).
+ * @param showCloseButton - If `true`, render a top-right close icon button inside the content; defaults to `true`.
+ * @returns The dialog content element (`DialogPrimitive.Content`) rendered within a portal and overlay.
  */
 function DialogContent({
   className,
@@ -142,12 +142,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 /**
- * Renders the dialog footer container and optional "Close" action.
+ * Renders a dialog footer container that can include an optional Close action.
  *
- * The footer arranges children with responsive layout and styling, and when `showCloseButton` is `true` renders a Close button that triggers the dialog close action.
- *
- * @param showCloseButton - Whether to render a Close button in the footer (default: `false`)
- * @returns The rendered dialog footer element
+ * @param showCloseButton - If `true`, includes a "Close" button that triggers the dialog close action (default: `false`).
+ * @returns The dialog footer element.
  */
 function DialogFooter({
   className,
@@ -177,12 +175,11 @@ function DialogFooter({
 }
 
 /**
- * Dialog title element that applies consistent typography and a `data-slot` attribute.
+ * Render a dialog title element with standardized typography and a `data-slot` attribute.
  *
- * Renders Radix `DialogPrimitive.Title`, merges the provided `className` with the component's
- * default heading styles, and forwards all other props to the underlying element.
+ * Merges default heading classes with an optional `className` and forwards remaining props to Radix `DialogPrimitive.Title`.
  *
- * @returns A React element rendering the dialog title with merged classes and `data-slot="dialog-title"`.
+ * @returns The rendered dialog title element.
  */
 function DialogTitle({
   className,

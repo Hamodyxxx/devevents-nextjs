@@ -3,10 +3,10 @@ import type { IEvent } from '@/database/event.model';
 import { EventDtoSchema, type EventDto } from './event.dto';
 
 /**
- * Convert an event database document into a validated EventDto.
+ * Map an event database document to a validated DTO.
  *
- * @param doc - The event document (database model) to convert into a DTO
- * @returns The validated EventDto built from `doc`
+ * @param doc - The event document to convert
+ * @returns The validated `EventDto` constructed from `doc`
  * @throws If the constructed DTO does not conform to `EventDtoSchema`
  */
 export function mapEventToDto(doc: IEvent): EventDto {
