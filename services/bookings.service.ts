@@ -13,6 +13,19 @@ interface CreateBookingParams {
   email: string;
 }
 
+/**
+ * Create a booking for an event using the provided email.
+ *
+ * Validates `eventId` and `email`, prevents duplicate bookings for the same event/email,
+ * increments the event's booking counter, and returns the newly created booking record.
+ *
+ * @param eventId - The event identifier string to book
+ * @param email - The purchaser's email address
+ * @returns The created booking record
+ * @throws BadRequestError - If `eventId` has an invalid format
+ * @throws BadRequestError - If `email` has an invalid format
+ * @throws BadRequestError - If a booking already exists for the given event and email
+ */
 export async function createBookingByEmailService({ eventId, email }: CreateBookingParams) {
   await dbConnect();
 

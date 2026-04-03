@@ -5,6 +5,14 @@ import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
 import { createEvent, CreateEventInputSchema, getEventBySlug, listEvents, type EventDto } from "@/data-access";
 
+/**
+ * Creates a new event from submitted FormData, uploads its image, validates the payload, and persists the event.
+ *
+ * @param eventData - FormData containing event fields. Must include an `image` File; may include `tags` and `agenda` as JSON-encoded strings.
+ * @returns The created event object.
+ * @throws BadRequestError - If the FormData cannot be converted to an object, if `image` is missing, or if the validated event payload is invalid.
+ * @throws Any error returned by the data layer when creating the event.
+ */
 export async function createEventService(
     eventData: FormData
 ) {
@@ -45,6 +53,12 @@ export async function createEventService(
     return createdEventResult.data;
 }
 
+/**
+ * Retrieves all events from the data layer.
+ *
+ * @returns An array of event DTOs.
+ * @throws AppError when fetching events fails.
+ */
 export async function getAllEventsService() {
     await dbConnect();
 
@@ -55,6 +69,14 @@ export async function getAllEventsService() {
     return eventsRes.data;
 }
 
+/**
+ * Retrieve a single event by its URL-friendly slug.
+ *
+ * @param slug - The event's slug (URL-friendly identifier)
+ * @returns The event matching the provided `slug`
+ * @throws NotFoundError if no event exists with the given `slug`
+ * @throws Any error returned by the data access layer when retrieval fails
+ */
 export async function getEventBySlugService(slug: string) {
     await dbConnect();
 
@@ -66,6 +88,12 @@ export async function getEventBySlugService(slug: string) {
     return eventsRes.data;
 }
 
+/**
+ * Fetches events that share tags with the event identified by the given slug, excluding the event itself.
+ *
+ * @param slug - The slug of the reference event used to find similar events
+ * @returns An array of `EventDto` objects with overlapping tags; returns an empty array if no similar events are found or if the similarity query fails
+ */
 export async function getSimilarEventsBySlugService(slug: string): Promise<EventDto[]> {
     await dbConnect();
     const event = await getEventBySlugService(slug);

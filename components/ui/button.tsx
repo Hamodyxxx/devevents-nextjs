@@ -41,6 +41,14 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * Render a styled, variant- and size-configurable button, optionally rendered as a polymorphic child.
+ *
+ * @param variant - Visual variant to apply (e.g., `"default"`, `"outline"`, `"ghost"`, `"destructive"`, `"link"`).
+ * @param size - Size variant to apply (e.g., `"default"`, `"xs"`, `"sm"`, `"lg"`, `"icon"`, `"icon-xs"`, `"icon-sm"`, `"icon-lg"`).
+ * @param asChild - If `true`, render a `Slot.Root` for polymorphic composition; otherwise render a native `button` element.
+ * @returns A React element for the styled button (either a `button` or a `Slot.Root`) with computed variant classes and forwarded props.
+ */
 function Button({
   className,
   variant = "default",
