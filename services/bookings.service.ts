@@ -1,8 +1,12 @@
 import dbConnect from '@/lib/mongo';
-import Booking, { IBooking } from '@/database/booking.model';
-import Event from '@/database/event.model';
 import { BadRequestError } from '@/lib/errors/app-error';
-import mongoose from 'mongoose';
+import {
+  createBooking,
+  CreateBookingInputSchema,
+  incrementEventBookingCount,
+  listBookings,
+  ObjectIdStringSchema,
+} from '@/data-access';
 
 interface CreateBookingParams {
   eventId: string;
@@ -12,18 +16,25 @@ interface CreateBookingParams {
 export async function createBookingByEmailService({ eventId, email }: CreateBookingParams) {
   await dbConnect();
 
-  if (!mongoose.Types.ObjectId.isValid(eventId)) {
-    throw new BadRequestError('Invalid event ID format');
-  }
+  const parsedEventId = ObjectIdStringSchema.safeParse(eventId);
+  if (!parsedEventId.success) throw new BadRequestError('Invalid event ID format');
 
-  const existingBooking = await Booking.findOne({ eventId, email });
-  if (existingBooking) {
-    throw new BadRequestError('You have already booked this event');
-  }
+  const parsedEmail = CreateBookingInputSchema.shape.email.safeParse(email);
+  if (!parsedEmail.success) throw new BadRequestError('Invalid email format');
 
-  const newBooking = await Booking.create({ eventId, email });
-  
-  await Event.findByIdAndUpdate(eventId, { $inc: { bookingCount: 1 } });
+  const existing = await listBookings({
+    eventId: parsedEventId.data,
+    email: parsedEmail.data.toLowerCase(),
+  });
 
-  return newBooking as IBooking;
+  if (existing.length > 0) throw new BadRequestError('You have already booked this event');
+
+  const created = await createBooking({
+    eventId: parsedEventId.data,
+    email: parsedEmail.data,
+  });
+
+  await incrementEventBookingCount(parsedEventId.data, 1);
+
+  return created;
 }
