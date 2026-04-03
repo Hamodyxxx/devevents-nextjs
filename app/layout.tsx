@@ -39,7 +39,8 @@ export default function RootLayout({
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased min-h-screen`}
       >
         <AppProvider>
-            {/* <LightRays
+          <div className="fixed -z-50">
+            <LightRays
               className="h-full!"
               raysOrigin="top-center-offset"
               raysColor="#5dfeca"
@@ -53,8 +54,8 @@ export default function RootLayout({
               pulsating={false}
               fadeDistance={1}
               saturation={1}
-            /> */}
-            <Background/>
+            />
+          </div>
 
           <Navbar/>
 
