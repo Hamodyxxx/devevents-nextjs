@@ -1,20 +1,14 @@
 import { BASE_URL } from '@/constants/base-url';
 import { IEvent } from '@/database';
-import React, { Suspense } from 'react'
-import Heading from './heading';
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation';
-import EventDetails from './event-details/event-details';
-import SimilarEvents from './event-details/similar-events';
-import SimilarEventsSkeleton from './event-details/similar-events-skeleton';
-import BookEvent from './book-event/book-event';
 import { cacheLife } from 'next/cache';
-
-const getEventBySlug = async (slug: string) => {
-    const res = await fetch(`${BASE_URL}/api/events/${slug}`);
-    if (!res.ok) return null;
-    return ((await res.json()) as { data?: { event: IEvent | null} }).data?.event;
-}
-
+import BookEvent from '../book-event/book-event';
+import EventDetails from '../event-details/event-details';
+import SimilarEvents from '../event-details/similar-events/similar-events';
+import SimilarEventsSkeleton from '../event-details/similar-events/similar-events-skeleton';
+import Heading from '../heading';
+import { getEventBySlug } from '@/api/events/get-event-by-slug';
 interface EventDetailsContentProps {
     slugPromise: Promise<{slug: string}>
 }
