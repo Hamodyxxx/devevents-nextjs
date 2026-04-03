@@ -3,10 +3,12 @@ import { BadRequestError } from '@/lib/errors/app-error';
 import {
   createBooking,
   CreateBookingInputSchema,
+  deleteBookingById,
   incrementEventBookingCount,
   listBookings,
   ObjectIdStringSchema,
 } from '@/data-access';
+import { withSessionTransaction, withUndoAfter } from '@/utils/with-session-transaction';
 
 interface CreateBookingParams {
   eventId: string;
@@ -29,12 +31,26 @@ export async function createBookingByEmailService({ eventId, email }: CreateBook
 
   if (existing.length > 0) throw new BadRequestError('You have already booked this event');
 
-  const created = await createBooking({
+  const input = {
     eventId: parsedEventId.data,
     email: parsedEmail.data,
+  };
+
+  return withSessionTransaction({
+    work: async (session) => {
+      const created = await createBooking(input, session);
+      await incrementEventBookingCount(parsedEventId.data, 1, session);
+      return created;
+    },
+    onUnsupported: () =>
+      withUndoAfter({
+        first: () => createBooking(input),
+        after:  async () => {
+          await incrementEventBookingCount(parsedEventId.data, 1);
+        },
+        undo: async (created) => {
+          await deleteBookingById(created.id);
+        }
+      }),
   });
-
-  await incrementEventBookingCount(parsedEventId.data, 1);
-
-  return created;
 }

@@ -1,5 +1,3 @@
-import { useTheme } from 'next-themes';
-
 const Background = () => {
 
   return (

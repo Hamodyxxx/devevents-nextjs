@@ -11,10 +11,13 @@ import {
 export async function updateEventById(id: string, patch: UpdateEventInput): Promise<EventDto | null> {
   const parsedId = ObjectIdStringSchema.parse(id);
   const parsedPatch = UpdateEventInputSchema.parse(patch);
-  const doc = await Event.findByIdAndUpdate(parsedId, parsedPatch, {
-    new: true,
-    runValidators: true,
-  });
-  return doc ? mapEventToDto(doc) : null;
+  const doc = await Event.findById(parsedId);
+  if (!doc) return null;
+
+  // findByIdAndUpdate bypasses pre('save') hooks; load + set + save so slug/date/time
+  // normalization in database/event.model.ts runs.
+  doc.set(parsedPatch);
+  await doc.save();
+  return mapEventToDto(doc);
 }
 

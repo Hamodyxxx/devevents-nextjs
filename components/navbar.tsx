@@ -17,9 +17,15 @@ const Navbar = () => {
 
         <ul className= "flex flex-row items-center gap-6">
           {/* <ThemeToggle/> */}
-          <Link href="/home">Home</Link>
-          <Link href="/events">Events</Link>
-          <Link href="/events/create">Create Event</Link>
+          <li className='list-none'>
+            <Link href="/home">Home</Link>
+          </li>
+          <li className='list-none'>
+            <Link href="/events">Events</Link>
+          </li>
+          <li className='list-none'>
+            <Link href="/events/create">Create Event</Link>
+          </li>
         </ul>
       </nav>
     </header>
