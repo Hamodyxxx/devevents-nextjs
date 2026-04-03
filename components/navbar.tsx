@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 
 const Navbar = () => {
   return (
@@ -17,9 +16,16 @@ const Navbar = () => {
         </Link>
 
         <ul className= "flex flex-row items-center gap-6">
-          <Link href="/home">Home</Link>
-          <Link href="/events">Events</Link>
-          <Link href="/events/create">Create Event</Link>
+          {/* <ThemeToggle/> */}
+          <li className='list-none'>
+            <Link href="/home">Home</Link>
+          </li>
+          <li className='list-none'>
+            <Link href="/events">Events</Link>
+          </li>
+          <li className='list-none'>
+            <Link href="/events/create">Create Event</Link>
+          </li>
         </ul>
       </nav>
     </header>
