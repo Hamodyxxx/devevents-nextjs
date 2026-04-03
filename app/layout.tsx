@@ -29,6 +29,13 @@ interface RootLayoutProps extends PropsWithChildren {
     modal: React.ReactNode;
 }
 
+/**
+ * Defines the root layout of the application, wrapping content with global styles, fonts, UI providers, and visual effects.
+ *
+ * @param children - The main content to be rendered within the layout.
+ * @param modal - A modal component to be rendered above the main content.
+ * @returns The complete HTML structure of the application's root layout.
+ */
 export default function RootLayout({
   children,
   modal,

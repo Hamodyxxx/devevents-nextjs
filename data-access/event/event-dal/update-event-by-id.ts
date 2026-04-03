@@ -8,6 +8,13 @@ import {
   type UpdateEventInput,
 } from '../event-dtos';
 
+/**
+ * Update an Event document identified by its id and return the updated representation.
+ *
+ * @param id - The event's ObjectId as a string; validated before use
+ * @param patch - Partial event fields to apply; validated against the update schema
+ * @returns The updated Event as an `EventDto` if found and updated, `null` if no matching document exists
+ */
 export async function updateEventById(id: string, patch: UpdateEventInput): Promise<EventDto | null> {
   const parsedId = ObjectIdStringSchema.parse(id);
   const parsedPatch = UpdateEventInputSchema.parse(patch);

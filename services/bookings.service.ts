@@ -13,6 +13,16 @@ interface CreateBookingParams {
   email: string;
 }
 
+/**
+ * Create a booking for an event using a user's email.
+ *
+ * @param eventId - The event ID string to associate the booking with
+ * @param email - The user's email address for the booking
+ * @returns The created booking object
+ * @throws BadRequestError - if `eventId` is not a valid ID string
+ * @throws BadRequestError - if `email` is not a valid email
+ * @throws BadRequestError - if a booking already exists for the given event and email
+ */
 export async function createBookingByEmailService({ eventId, email }: CreateBookingParams) {
   await dbConnect();
 

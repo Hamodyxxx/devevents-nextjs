@@ -41,6 +41,15 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * Render a styled button component whose visual appearance is controlled by `variant` and `size`, and which can render as a Radix `Slot` for polymorphic composition.
+ *
+ * @param variant - Visual style variant that adjusts colors, hover/focus/active states, and destructive/link/ghost behaviors
+ * @param size - Size preset that controls height, padding, text sizing, and icon spacing
+ * @param asChild - If `true`, render `Slot.Root` to allow a custom child element to receive the button styling; otherwise render a native `button`
+ * @param className - Additional CSS class names appended to the computed variant/size classes
+ * @returns The rendered button element (either a native `button` or a Radix `Slot.Root`) with the computed classes and spread props
+ */
 function Button({
   className,
   variant = "default",

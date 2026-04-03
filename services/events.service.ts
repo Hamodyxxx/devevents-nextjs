@@ -5,6 +5,15 @@ import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
 import { createEvent, CreateEventInputSchema, getEventBySlug, listEvents, type EventDto } from "@/data-access";
 
+/**
+ * Creates an event from multipart FormData, uploads its image, validates the combined payload, and persists the event.
+ *
+ * @param eventData - FormData containing event fields; must include an `image` File and may include `tags` and `agenda` as JSON strings.
+ * @returns The newly created event data
+ * @throws BadRequestError - If FormData cannot be parsed, `image` is missing, or the event payload fails validation.
+ * @throws Error - If persisting the event fails; the underlying data-layer error is rethrown.
+ * Note: If the image upload succeeds but validation or persistence fails, the uploaded image asset is removed.
+ */
 export async function createEventService(
     eventData: FormData
 ) {
@@ -45,6 +54,12 @@ export async function createEventService(
     return createdEventResult.data;
 }
 
+/**
+ * Fetches all events from the data store.
+ *
+ * @returns An array of event DTOs (`EventDto[]`) representing all stored events.
+ * @throws AppError when fetching events fails
+ */
 export async function getAllEventsService() {
     await dbConnect();
 
@@ -55,6 +70,14 @@ export async function getAllEventsService() {
     return eventsRes.data;
 }
 
+/**
+ * Retrieve a single event by its slug.
+ *
+ * @param slug - The unique slug identifier of the event to retrieve
+ * @returns The event data matching the provided slug
+ * @throws NotFoundError if no event exists with the given slug
+ * @throws Error if the data access layer returns an error
+ */
 export async function getEventBySlugService(slug: string) {
     await dbConnect();
 
@@ -66,6 +89,12 @@ export async function getEventBySlugService(slug: string) {
     return eventsRes.data;
 }
 
+/**
+ * Finds events that share any tag with the event identified by the given slug, excluding the event itself.
+ *
+ * @param slug - The slug of the reference event
+ * @returns An array of `EventDto` objects that have at least one tag in common with the reference event; returns an empty array if no matches are found or if the query fails
+ */
 export async function getSimilarEventsBySlugService(slug: string): Promise<EventDto[]> {
     await dbConnect();
     const event = await getEventBySlugService(slug);

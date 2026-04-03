@@ -2,6 +2,12 @@ import type { IEvent } from '@/database/event.model';
 
 import { EventDtoSchema, type EventDto } from './event.dto';
 
+/**
+ * Map a database event document to a validated EventDto.
+ *
+ * @param doc - The event document (IEvent) retrieved from the database.
+ * @returns The resulting EventDto with `id` as a string and `createdAt`/`updatedAt` as ISO 8601 strings.
+ */
 export function mapEventToDto(doc: IEvent): EventDto {
   const dto: EventDto = {
     id: doc._id.toString(),
