@@ -1,5 +1,5 @@
 import { withErrorHandlerApi } from "@/lib/errors/with-error-handler";
-import { getEventBySlugService } from "@/services/events.service";
+import { getEventBySlugService } from "@/server/services/events.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = withErrorHandlerApi(async (req: NextRequest, { params }: { params: Promise<{ slug: string }> }) => {

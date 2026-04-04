@@ -1,4 +1,4 @@
-import { IEvent } from "@/database";
+import { IEvent } from "@/server/database";
 import Image from "next/image";
 import Link from "next/link";
 

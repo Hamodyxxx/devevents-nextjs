@@ -1,6 +1,6 @@
 "use server"
 
-import { createBookingByEmailService } from "@/services/bookings.service";
+import { createBookingByEmailService } from "@/server/services/bookings.service";
 import { withErrorHandlerAction } from "@/lib/errors/with-error-handler";
 
 export const createBookingByEmailAction = withErrorHandlerAction(async (eventId: string, email: string) => {

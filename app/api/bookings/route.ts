@@ -1,7 +1,7 @@
 import { AppError, BadRequestError } from "@/lib/errors/app-error";
 import { tryCatch } from "@/lib/try-catch";
 import { withErrorHandlerApi } from "@/lib/errors/with-error-handler";
-import { createBookingByEmailService } from "@/services/bookings.service";
+import { createBookingByEmailService } from "@/server/services/bookings.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = withErrorHandlerApi(async (req: NextRequest) => {

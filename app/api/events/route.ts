@@ -1,7 +1,7 @@
 import { AppError } from "@/lib/errors/app-error";
 import { withErrorHandlerApi } from "@/lib/errors/with-error-handler";
 import { tryCatch } from "@/lib/try-catch";
-import { createEventService, getAllEventsService } from "@/services/events.service";
+import { createEventService, getAllEventsService } from "@/server/services/events.service";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 

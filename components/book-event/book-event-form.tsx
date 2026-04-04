@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useBookEventMutation } from "@/hooks/use-book-event-mutation";
-import { IEvent } from "@/database";
+import { IEvent } from "@/server/database";
 import posthog from "posthog-js";
 import { posthogClient } from "@/instrumation-client";
 

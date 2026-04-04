@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { IEvent } from "@/database";
+import { IEvent } from "@/server/database";
 import BookEvent from "@/components/book-event/book-event";
 import Link from "next/link";
 import Image from "next/image";

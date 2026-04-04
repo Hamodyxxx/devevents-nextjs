@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/constants/base-url'
-import { IEvent } from '@/database';
+import { IEvent } from '@/server/database';
 import React from 'react'
 import EventCard from '../../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';

@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/constants/base-url';
-import { IEvent } from '@/database';
+import { IEvent } from '@/server/database';
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation';
 import { cacheLife } from 'next/cache';
