@@ -1,4 +1,4 @@
-import { AppError, BadRequestError } from "@/lib/errors/app-error";
+import { BadRequestError } from "@/lib/errors/app-error";
 import { tryCatch } from "@/lib/try-catch";
 import { withErrorHandlerApi } from "@/lib/errors/with-error-handler";
 import { createBookingByEmailService } from "@/server/services/bookings.service";

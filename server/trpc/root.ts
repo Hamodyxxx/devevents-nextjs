@@ -1,6 +1,6 @@
-import { createTRPCRouter } from './init';
+import { createRouter } from './init';
 
-export const appRouter = createTRPCRouter({
+export const appRouter = createRouter({
 });
 
 export type AppRouter = typeof appRouter;
