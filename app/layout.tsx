@@ -1,3 +1,4 @@
+import '../lib/orpc/orpc.server';
 import type { Metadata } from "next";
 import {  Martian_Mono, Schibsted_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
@@ -46,7 +47,7 @@ export default function RootLayout({
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased min-h-screen`}
       >
         <AppProvider>
-          <div className="fixed -z-50">
+          <div className="fixed -z-50 inset-0">
             <LightRays
               className="h-full!"
               raysOrigin="top-center-offset"

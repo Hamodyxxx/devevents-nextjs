@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/constants/base-url";
-import { IEvent } from "@/database";
+import { IEvent } from "@/server/database";
 import { cacheLife } from "next/cache";
 
 export const getEventBySlug = async (slug: string) => {

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import BookEventModal from "@/components/modals/book-event-modal";
 import { cacheLife } from "next/cache";
-import { getEventBySlug } from "@/api/events/get-event-by-slug";
+import { orpcClient } from "@/lib/orpc/orpc";
 
 interface BookEventModalPageContentProps {
   slugPromise: Promise<{ slug: string }>;
@@ -14,9 +14,11 @@ const BookEventModalPageContent = async ({
   cacheLife("hours");
 
   const { slug } = await slugPromise;
-  const event = await getEventBySlug(slug);
+  const data = await orpcClient.events.getBySlug({ slug });
+  const event = data?.data?.event
 
   if (!event) return notFound();
+
 
   return <BookEventModal event={event} />;
 };

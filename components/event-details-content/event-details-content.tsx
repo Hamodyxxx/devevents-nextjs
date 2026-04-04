@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/constants/base-url';
-import { IEvent } from '@/database';
+import { IEvent } from '@/server/database';
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation';
 import { cacheLife } from 'next/cache';
@@ -8,7 +8,7 @@ import EventDetails from '../event-details/event-details';
 import SimilarEvents from '../event-details/similar-events/similar-events';
 import SimilarEventsSkeleton from '../event-details/similar-events/similar-events-skeleton';
 import Heading from '../heading';
-import { getEventBySlug } from '@/api/events/get-event-by-slug';
+import { orpcClient } from '@/lib/orpc/orpc';
 interface EventDetailsContentProps {
     slugPromise: Promise<{slug: string}>
 }
@@ -20,9 +20,11 @@ const EventDetailsContent = async({
     cacheLife("hours");
 
     const { slug } = await slugPromise;
-    const event = await getEventBySlug(slug);
+    const data = await orpcClient.events.getBySlug({ slug });
+    const event = data?.data?.event;
     
     if(!event) return notFound();
+
 
     return (
         <section id="event">

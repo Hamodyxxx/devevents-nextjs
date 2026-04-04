@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
-import TanstackQueryClientProvider from "../tanstack-query-client-provider/tanstack-query-client-provider"
 import { ThemeProvider } from "next-themes"
+import TrpcClientProvider from "../tanstack-query-client-provider/tanstack-query-client-provider"
 
 interface AppProviderProps extends PropsWithChildren {}
 
@@ -13,9 +13,9 @@ const AppProvider = ({
       defaultTheme="system"
       enableSystem
     >
-      <TanstackQueryClientProvider>
+      <TrpcClientProvider>
         {children}
-      </TanstackQueryClientProvider>
+      </TrpcClientProvider>
     </ThemeProvider>
   )
 }

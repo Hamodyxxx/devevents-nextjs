@@ -1,30 +1,22 @@
 import GridView from '../grid-view';
 import { BASE_URL } from '@/constants/base-url';
 import { IResponse } from '@/types/response';
-import { IEvent } from '@/database';
+import { IEvent } from '@/server/database';
 import { notFound } from 'next/navigation';
 import EventCard from '../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
-
-
-const getEvents = async () => {
-    const res = await fetch(`${BASE_URL}/api/events`);
-
-    const data = await res.json();
-    return data as IResponse<{
-        events: IEvent[]
-    }>
-}
+import { orpcClient } from '@/lib/orpc/orpc';
 
 const FeaturedEvents = async () => {
     "use cache";
     cacheLife("hours");
     cacheTag("featured events")
 
-    const { data } = await getEvents();
-    if(!data) return notFound();
+    const data = await orpcClient.events.getAll();
+    const  events  = data?.data?.events;
+    
+    if(!events) return notFound();
 
-    const { events } = data;
 
     return (
         <div className="mt-20 space-y-7">
