@@ -1,11 +1,15 @@
 import BookEventModal from "@/components/modals/book-event-modal";
 import { createBookingByEmailService } from "@/server/services/bookings.service";
-import { publicProcedure } from "@/server/trpc/init";
+import { base } from "@/server/orpc/init";
 import z from "zod";
 
-export const bookEventByEmail = publicProcedure
+export const bookEventByEmailProcedure = base
     .input(z.object({ eventId: z.string(), email: z.email()}))
-    .mutation(async ({ input }) => {
+    .route({
+        method: "POST",
+        path: "/bookings"
+    })
+    .handler(async ({ input }) => {
         const booking = await createBookingByEmailService(input); 
 
         return {

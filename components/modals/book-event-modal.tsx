@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { EventDto } from "@/server/data-access";
 
 interface BookEventModalProps {
-  event: IEvent;
+  event: EventDto;
 }
 
 const BookEventModal = ({ event }: BookEventModalProps) => {

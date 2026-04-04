@@ -5,23 +5,14 @@ import { IEvent } from '@/server/database';
 import { notFound } from 'next/navigation';
 import EventCard from '../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
-
-
-const getEvents = async () => {
-    const res = await fetch(`${BASE_URL}/api/events`);
-
-    const data = await res.json();
-    return data as IResponse<{
-        events: IEvent[]
-    }>
-}
+import { orpcClient } from '@/lib/orpc/orpc';
 
 const FeaturedEvents = async () => {
     "use cache";
     cacheLife("hours");
     cacheTag("featured events")
 
-    const { data } = await getEvents();
+    const { data } = await orpcClient.events.getAll();
     if(!data) return notFound();
 
     const { events } = data;

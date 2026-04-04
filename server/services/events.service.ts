@@ -4,6 +4,7 @@ import { tryCatch, tryCatchSync } from "@/lib/try-catch";
 import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
 import { createEvent, CreateEventInputSchema, getEventBySlug, listEvents, type EventDto } from "@/server/data-access";
+import { CreateEventProcedureInputType } from "../routes/events/create-event.procedure";
 
 /**
  * Creates a new event from submitted FormData, uploads its image, validates the payload, and persists the event.
@@ -14,29 +15,27 @@ import { createEvent, CreateEventInputSchema, getEventBySlug, listEvents, type E
  * @throws Any error returned by the data layer when creating the event.
  */
 export async function createEventService(
-    eventData: FormData
+    eventData: CreateEventProcedureInputType
 ) {
     await dbConnect();
 
-    const {data: event, error} = tryCatchSync(() => Object.fromEntries(eventData));
-    if(error) throw new BadRequestError("Invalid JSON data format");
-
-    const file = eventData.get('image') as File;
+    const file = eventData.image as File;
     if(!file) throw new BadRequestError('image is required');
 
-    const tags = JSON.parse((eventData.get("tags") as string) || "[]") || [];
-    const agenda = JSON.parse((eventData.get("agenda") as string) || "[]") || [];
+    const tags = JSON.parse((eventData.tags ) || "[]") || [];
+    const agenda = JSON.parse((eventData.agenda) || "[]") || [];
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const uploadResult = await uploadImageToCloudinaryService(buffer);
 
-    event.image = uploadResult.secure_url;
+    const event = {
+        ...eventData,
+        tags: tags,
+        agenda: agenda,
+        image: uploadResult.secure_url
+    }
 
-    const parsed = CreateEventInputSchema.safeParse({
-        ...(event as Record<string, unknown>),
-        tags,
-        agenda,
-    });
+    const parsed = CreateEventInputSchema.safeParse(event);
 
     if (!parsed.success) {
         await tryCatch(v2.uploader.destroy(uploadResult.public_id));

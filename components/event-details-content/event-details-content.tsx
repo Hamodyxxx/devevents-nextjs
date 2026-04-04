@@ -8,7 +8,7 @@ import EventDetails from '../event-details/event-details';
 import SimilarEvents from '../event-details/similar-events/similar-events';
 import SimilarEventsSkeleton from '../event-details/similar-events/similar-events-skeleton';
 import Heading from '../heading';
-import { getEventBySlug } from '@/api/events/get-event-by-slug';
+import { orpcClient } from '@/lib/orpc/orpc';
 interface EventDetailsContentProps {
     slugPromise: Promise<{slug: string}>
 }
@@ -20,9 +20,11 @@ const EventDetailsContent = async({
     cacheLife("hours");
 
     const { slug } = await slugPromise;
-    const event = await getEventBySlug(slug);
+    const data = await orpcClient.events.getBySlug({ slug });
     
-    if(!event) return notFound();
+    if(!data) return notFound();
+
+    const { data: { event }} = data;
 
     return (
         <section id="event">

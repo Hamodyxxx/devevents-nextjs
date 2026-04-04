@@ -4,13 +4,10 @@ import EventDetailItem from "./event-detail-item"
 import { cn } from "@/lib/utils"
 import EventAgenda from "./event-agenda"
 import EventTags from "./event-tags"
-import { tryCatch } from "@/lib/try-catch"
-
-
-
+import { EventDto } from "@/server/data-access"
 
 interface EventDetailsProps {
-    event: IEvent
+    event: EventDto
     className?: string
 }
 

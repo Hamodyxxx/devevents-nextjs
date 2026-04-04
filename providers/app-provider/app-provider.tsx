@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import { ThemeProvider } from "next-themes"
-import TrpcClientProvider from "../trpc-client-provider/trpc-client-provider"
+import TrpcClientProvider from "../tanstack-query-client-provider/tanstack-query-client-provider"
 
 interface AppProviderProps extends PropsWithChildren {}
 

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { bookEventByEmail } from "@/api/bookings/book-event-by-email";
 import { posthogClient } from "@/instrumation-client";
+import { orpc } from "@/lib/orpc/orpc";
 
 interface UseBookEventMutationArgs {
     eventId: string,
@@ -13,11 +13,10 @@ export const useBookEventMutation = ({
     eventSlug,    
     onSuccess,
 }: UseBookEventMutationArgs) => {
-    return useMutation({
-        mutationFn: (email: string) => bookEventByEmail(eventId, email),
+    return useMutation(orpc.bookings.create.mutationOptions({
         onSuccess: (_, email) => {
             onSuccess?.()
-
+    
             posthogClient.capture('event-booked', {
                 eventId,
                 slug: eventSlug,
@@ -27,5 +26,5 @@ export const useBookEventMutation = ({
         onError: () => {
             posthogClient.captureException("Booking Creation Failed");
         }
-    });
+    }));
 }

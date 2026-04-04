@@ -1,9 +1,10 @@
+import { EventDto } from "@/server/data-access";
 import { IEvent } from "@/server/database";
 import Image from "next/image";
 import Link from "next/link";
 
 interface EventCardProps {
-    event: IEvent;
+    event: EventDto;
 }
 
 const EventCard = ({
