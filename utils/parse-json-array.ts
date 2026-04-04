@@ -3,8 +3,12 @@ import { tryCatch } from "@/lib/try-catch";
 
 export const parseJsonArray = (value: string, field: string) => {
     const result = tryCatch(() => JSON.parse(value || "[]"));
-    if (result.error || !Array.isArray(result.data)) {
+    if (
+        result.error ||
+        !Array.isArray(result.data) ||
+        !result.data.every((item) => typeof item === "string")
+    ) {
         throw new BadRequestError(`${field} must be a JSON array`);
     }
-    return result.data as string[];
+    return result.data;
 };
