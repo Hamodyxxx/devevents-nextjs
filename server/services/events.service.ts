@@ -5,6 +5,7 @@ import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
 import { createEvent, CreateEventInputSchema, getEventBySlug, listEvents, type EventDto } from "@/server/data-access";
 import { CreateEventProcedureInputType } from "../routes/events/create-event.procedure";
+import { parseJsonArray } from "@/utils/parse-json-array";
 
 /**
  * Creates a new event from submitted FormData, uploads its image, validates the payload, and persists the event.
@@ -22,8 +23,8 @@ export async function createEventService(
     const file = eventData.image as File;
     if(!file) throw new BadRequestError('image is required');
 
-    const tags = JSON.parse((eventData.tags ) || "[]") || [];
-    const agenda = JSON.parse((eventData.agenda) || "[]") || [];
+    const tags = parseJsonArray(eventData.tags, "tags");
+    const agenda = parseJsonArray(eventData.agenda, "agenda");
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const uploadResult = await uploadImageToCloudinaryService(buffer);

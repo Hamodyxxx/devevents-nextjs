@@ -1,6 +1,7 @@
 import { formatError } from "@/lib/errors/format-error";
 import { normalizeError } from "@/lib/errors/normalize-error";
-import { ORPCError, ORPCErrorCode } from "@orpc/client";
+import { ORPCErrorCode } from "@orpc/client";
+import { ORPCError } from "@orpc/server";
 import { os } from "@orpc/server";
 
 

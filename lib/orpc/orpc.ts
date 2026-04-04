@@ -1,4 +1,4 @@
-import { RouterClient } from "@orpc/server";
+import type { RouterClient } from "@orpc/server";
 import { createORPCClient } from "@orpc/client";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { RPCLink } from "@orpc/client/fetch";

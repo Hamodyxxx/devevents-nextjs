@@ -9,9 +9,12 @@ import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 const openApiHandler = new OpenAPIHandler(mainRouter, {
      interceptors: [
         onError((error) => {
-            console.error(error);
+            console.error('oRPC request failed', {
+                name: error instanceof Error ? error.name : 'UnknownError',
+                message: error instanceof Error ? error.message : String(error),
+            });       
         })
-     ],
+    ],
      plugins: [
         new SmartCoercionPlugin({
             schemaConverters: [new ZodToJsonSchemaConverter()]
@@ -32,7 +35,9 @@ async function handleRequest(request:Request) {
 
     const { response } = await openApiHandler.handle(request, {
         prefix: "/api",
-        context: {}
+        context: {
+            headers: request.headers
+        },    
     })
 
     return response ?? new Response("Not Found", {status: 404});

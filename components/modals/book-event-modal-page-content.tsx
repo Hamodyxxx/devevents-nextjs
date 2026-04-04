@@ -15,10 +15,12 @@ const BookEventModalPageContent = async ({
 
   const { slug } = await slugPromise;
   const data = await orpcClient.events.getBySlug({ slug });
+  const event = data?.data?.event
 
-  if (!data) return notFound();
+  if (!event) return notFound();
 
-  return <BookEventModal event={data.data.event} />;
+
+  return <BookEventModal event={event} />;
 };
 
 export default BookEventModalPageContent;

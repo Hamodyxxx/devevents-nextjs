@@ -1,20 +1,25 @@
 import { RPCHandler } from '@orpc/server/fetch'
 import { onError } from '@orpc/server'
 import { mainRouter } from '@/server/routes'
-import { headers as getHeaders} from 'next/headers';
+import { headers as getHeaders, headers} from 'next/headers';
 
 const handler = new RPCHandler(mainRouter, {
-  interceptors: [ 
+  interceptors: [
     onError((error) => {
-      console.error(error);
-    }),
+        console.error('oRPC request failed', {
+            name: error instanceof Error ? error.name : 'UnknownError',
+            message: error instanceof Error ? error.message : String(error),
+        });       
+    })
   ],
 })
 
 async function handleRequest(request: Request) {
   const { response, matched } = await handler.handle(request, {
     prefix: '/rpc',
-    context: {},
+    context: {
+      headers: request.headers
+    },
   })
 
   if (matched) {

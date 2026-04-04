@@ -14,13 +14,13 @@ export const useBookEventMutation = ({
     onSuccess,
 }: UseBookEventMutationArgs) => {
     return useMutation(orpc.bookings.create.mutationOptions({
-        onSuccess: (_, email) => {
+        onSuccess: (_, data) => {
             onSuccess?.()
     
             posthogClient.capture('event-booked', {
-                eventId,
+                eventId: data.eventId,
                 slug: eventSlug,
-                email
+                email: data.email
             })
         },
         onError: () => {

@@ -12,10 +12,11 @@ const FeaturedEvents = async () => {
     cacheLife("hours");
     cacheTag("featured events")
 
-    const { data } = await orpcClient.events.getAll();
-    if(!data) return notFound();
+    const data = await orpcClient.events.getAll();
+    const  events  = data?.data?.events;
+    
+    if(!events) return notFound();
 
-    const { events } = data;
 
     return (
         <div className="mt-20 space-y-7">
