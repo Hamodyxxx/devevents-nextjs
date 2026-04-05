@@ -22,13 +22,14 @@ const BookEventModal = ({ event }: BookEventModalProps) => {
 
   return (
     <Dialog onOpenChange={() => router.back()} open={true}>
+      
       <DialogContent
         id="book-event-modal"
-        className="max-w-4xl! w-full! border-[#1f2f38] bg-[#0d161a] text-white p-0 overflow-hidden"
+        className="max-w-4xl! w-full! border-[#1f2f38] bg-[#0d161a] text-white p-0 mx-2 overflow-hidden"
       >
         <div className="flex flex-col lg:flex-row w-full">
 
-          <div className="relative w-1/2 shrink-0">
+          <div className="relative w-full lg:w-1/2 shrink-0">
             <div className="relative h-56 lg:h-full lg:min-h-105 w-full">
               <Image
                 src={event.image}

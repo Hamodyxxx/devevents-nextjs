@@ -1,5 +1,4 @@
 import { AppError, BadRequestError, NotFoundError } from "@/lib/errors/app-error";
-import dbConnect from "@/lib/mongo";
 import { tryCatch, tryCatchSync } from "@/lib/try-catch";
 import { v2 } from "cloudinary";
 import { uploadImageToCloudinaryService } from "./image.service";
@@ -18,8 +17,6 @@ import { parseJsonArray } from "@/utils/parse-json-array";
 export async function createEventService(
     eventData: CreateEventProcedureInputType
 ) {
-    await dbConnect();
-
     const file = eventData.image as File;
     if(!file) throw new BadRequestError('image is required');
 
@@ -53,16 +50,35 @@ export async function createEventService(
     return createdEventResult.data;
 }
 
+interface GetAllEventsServiceArgs {
+    searchQuery?: string;
+    page?: number;
+    limit?: number;
+}
 /**
  * Retrieves all events from the data layer.
  *
  * @returns An array of event DTOs.
  * @throws AppError when fetching events fails.
  */
-export async function getAllEventsService() {
-    await dbConnect();
+export async function getAllEventsService({
+    searchQuery = "",
+    page = 1,
+    limit = 10
+}: GetAllEventsServiceArgs) {
 
-    const eventsRes = await tryCatch(listEvents({}));
+    const where: Record<string, any> = {};
+
+    if (searchQuery) {
+        where.title = { $regex: searchQuery, $options: 'i' };
+    }
+
+
+    const eventsRes = await tryCatch(listEvents({
+        where: where,
+        limit,
+        page
+    }));
 
     if(eventsRes.error) throw new AppError("Failed to fetch events", 500);
 
@@ -78,8 +94,6 @@ export async function getAllEventsService() {
  * @throws Any error returned by the data access layer when retrieval fails
  */
 export async function getEventBySlugService(slug: string) {
-    await dbConnect();
-
     const eventsRes = await tryCatch(getEventBySlug(slug));
 
     if(eventsRes.error) throw eventsRes.error;      
@@ -95,19 +109,20 @@ export async function getEventBySlugService(slug: string) {
  * @returns An array of `EventDto` objects with overlapping tags; returns an empty array if no similar events are found or if the similarity query fails
  */
 export async function getSimilarEventsBySlugService(slug: string): Promise<EventDto[]> {
-    await dbConnect();
     const event = await getEventBySlugService(slug);
 
     // Similarity query needs a flexible filter; keep it in DAL but pass raw mongo filter.
     const similarEventsRes = await tryCatch(
         listEvents({
-            _id: { $ne: event.id },
-            tags: { $in: event.tags },
+            where: {
+                _id: { $ne: event.id },
+                tags: { $in: event.tags },
+            }
         })
     );
 
     if(similarEventsRes.error) return [];
     if(!similarEventsRes.data) return [];
 
-    return similarEventsRes.data;
+    return similarEventsRes.data.data;
 }

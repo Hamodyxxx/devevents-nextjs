@@ -5,7 +5,8 @@ interface InterceptedEventPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const InterceptedEventPage = ({ params }: InterceptedEventPageProps) => {
+const InterceptedEventPage =  ({ params}: InterceptedEventPageProps) => {
+
   return (
     <Suspense fallback={null}>
       <BookEventModalPageContent slugPromise={params} />

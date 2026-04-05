@@ -47,7 +47,7 @@ export default function RootLayout({
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased min-h-screen`}
       >
         <AppProvider>
-          <div className="fixed -z-50 inset-0">
+          <div className="fixed -z-50 inset-0 bg-black">
             <LightRays
               className="h-full!"
               raysOrigin="top-center-offset"

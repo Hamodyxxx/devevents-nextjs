@@ -1,4 +1,3 @@
-import dbConnect from '@/lib/mongo';
 import { BadRequestError } from '@/lib/errors/app-error';
 import {
   createBooking,
@@ -29,7 +28,6 @@ interface CreateBookingParams {
  * @throws BadRequestError - If a booking already exists for the given event and email
  */
 export async function createBookingByEmailService({ eventId, email }: CreateBookingParams) {
-  await dbConnect();
 
   const parsedEventId = ObjectIdStringSchema.safeParse(eventId);
   if (!parsedEventId.success) throw new BadRequestError('Invalid event ID format');

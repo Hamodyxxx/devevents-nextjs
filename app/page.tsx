@@ -2,6 +2,7 @@ import ExploreBtn from "@/components/explore-btn";
 import FeaturedEvents from "@/components/featured-events/featured-events";
 import FeaturedEventsSkeleton from "@/components/featured-events/featured-events-skeleton";
 import Heading from "@/components/heading";
+import { orpcClient } from "@/lib/orpc/orpc";
 import { Suspense } from "react";
 
 const Page = async () => {
