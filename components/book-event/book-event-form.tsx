@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react"
+import React, { SubmitEventHandler, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useBookEventMutation } from "@/hooks/use-book-event-mutation";
 import { IEvent } from "@/server/database";
 import posthog from "posthog-js";
 import { posthogClient } from "@/instrumation-client";
+import { EventDto } from "@/server/data-access";
 
 interface BookEventFormProps {
-    event: IEvent;
+    event: EventDto;
     onSubmit?: () => void
 }
 
@@ -17,19 +18,21 @@ const BookEventForm = ({
     const emailRef = useRef<HTMLInputElement>(null);
 
     const {error, mutate, isPending} = useBookEventMutation({
-        eventId: event._id as unknown as string, 
+        eventId: event.id as unknown as string, 
         eventSlug: event.slug,
         onSuccess: onSubmit
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit: SubmitEventHandler = (e) => {
         e.preventDefault();
         const email = emailRef.current?.value;
         if (email) {
-            mutate(email);
+            mutate({
+                email: email,
+                eventId: event.id
+            });
         }
     }
-
 
     return (
         <form onSubmit={handleSubmit} >

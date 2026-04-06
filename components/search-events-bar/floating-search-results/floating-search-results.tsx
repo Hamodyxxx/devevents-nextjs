@@ -4,19 +4,19 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 
-interface SearchResultsProps<T> {
+interface FloatingSearchResultsProps<T> {
   items: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   isVisible: boolean;
   className?: string;
 }
 
-export const SearchResults = <T,>({ 
+export const FloatingSearchResults = <T,>({ 
   items, 
   renderItem, 
   isVisible, 
   className 
-}: SearchResultsProps<T>) => {
+}: FloatingSearchResultsProps<T>) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {

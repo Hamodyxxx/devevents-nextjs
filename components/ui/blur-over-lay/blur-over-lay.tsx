@@ -1,26 +1,38 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
 interface BlurOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  zIndex?: string;
-  opacity?: string;
+  className?: string;
 }
 
 export const BlurOverlay = ({ 
   isOpen, 
   onClose, 
-  zIndex = "z-40", 
-  opacity = "bg-black/40" 
+  className = "z-40 bg-black/40" ,
 }: BlurOverlayProps) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       onClick={onClose}
-      className={`
-        fixed inset-0 w-screen h-screen transition-opacity duration-300 ${zIndex} ${opacity} backdrop-blur-sm
-        ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}
-      `}
+      className={cn(
+        "fixed inset-0 transition-opacity duration-300 backdrop-blur-sm",
+        isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none",
+        className,
+      )}
       aria-hidden="true"
-    />
+    />,
+    document.body 
   );
 };

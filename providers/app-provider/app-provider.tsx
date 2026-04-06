@@ -1,8 +1,7 @@
 import { PropsWithChildren } from "react"
 import { ThemeProvider } from "next-themes"
 import TrpcClientProvider from "../tanstack-query-client-provider/tanstack-query-client-provider"
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 interface AppProviderProps extends PropsWithChildren {}
 
@@ -17,7 +16,9 @@ const AppProvider = ({
       enableSystem  
     >
       <TrpcClientProvider>
+        <NuqsAdapter>
         {children}
+        </NuqsAdapter>
       </TrpcClientProvider>
     </ThemeProvider>
   )

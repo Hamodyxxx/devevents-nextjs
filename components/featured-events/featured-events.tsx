@@ -3,17 +3,17 @@ import { notFound } from 'next/navigation';
 import EventCard from '../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
 import { orpcClient } from '@/lib/orpc/orpc';
+import { wait } from '@/lib/wait';
 
 const FeaturedEvents = async () => {
     "use cache";
     cacheLife("hours");
-    cacheTag("featured events")
+    cacheTag("featured events");
 
     const data = await orpcClient.events.getAll();
     const  events  = data?.data?.events;
     
     if(!events) return notFound();
-
 
     return (
         <div className="mt-20 space-y-7">

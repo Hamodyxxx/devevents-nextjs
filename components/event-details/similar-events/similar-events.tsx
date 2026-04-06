@@ -1,15 +1,9 @@
 import { BASE_URL } from '@/constants/base-url'
 import { IEvent } from '@/server/database';
-import React from 'react'
 import EventCard from '../../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
+import { orpcClient } from '@/lib/orpc/orpc';
 
-const getSimilarEvents = async (slug: string) => {
-    const res = await fetch(`${BASE_URL}/api/events/${slug}/similar`);
-    if(!res.ok) return [] as IEvent[];
-    const data = await res.json();
-    return data.data.events as IEvent[];
-}
 
 interface SimilarEventsProps {
     slug: string
@@ -22,7 +16,11 @@ const SimilarEvents = async ({
     cacheTag(`similar-events-${slug}`)
     cacheLife("hours");
 
-    const events = await getSimilarEvents(slug);
+    const data = await orpcClient.events.getSimilar({
+        slug
+    });
+
+    const events = data?.data?.events || [];
 
     if (events.length === 0) return null;
 

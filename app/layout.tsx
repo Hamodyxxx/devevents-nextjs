@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 import LightRays from "@/components/light-rays";
 import Navbar from "@/components/navbar";
 import AppProvider from "@/providers/app-provider/app-provider";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 import Background from "@/components/background/background";
+import BookEventModalSkeleton from '@/components/modals/book-event-modal/book-event-modal.sekelton';
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

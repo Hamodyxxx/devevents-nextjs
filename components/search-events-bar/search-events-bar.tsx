@@ -4,25 +4,27 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap/gsap-core";
 import { BlurOverlay } from "../ui/blur-over-lay/blur-over-lay";
 import { SearchInput } from "../ui/search-input/search-input";
-import { EventsSearchResult } from "../events-search-result/events-search-result";
-
-type EventItem = { id: string; title: string; location: string };
+import { FloatingEventsSearchResult } from "./floating-events-search-result/floating-events-search-result";
+import { useQueryState } from "nuqs";
 
 export const SearchEventsBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useQueryState(
+    "query",
+    { defaultValue: ""}
+  );
 
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const el = searchRef.current;
 
     if(isExpanded) gsap.to(el, {
-        width: "40vw", 
+        width: "70%", 
         transition: "all",
       });
     else gsap.fromTo(el,
-      {width: "50%"}
+      { width: "70%" }
       , {
         width: "200px", 
         transition: "all",
@@ -40,16 +42,20 @@ export const SearchEventsBar = () => {
 
       <SearchInput
         isExpanded={isExpanded}
+        className="w-[200px]"
         ref={searchRef}
         inputProps={{
           onFocus:() => setIsExpanded(true),
-          onBlur:() => setIsExpanded(false),
+          onBlur:(e) => {
+            if (searchRef.current?.contains(e.relatedTarget as Node)) return;
+            setIsExpanded(false)
+          },
           value: query,
-          onChange: (e) => setQuery(e.target.value),
+          onChange: (e) => setQuery(e.target.value || null),
         }}
       />
 
-      <EventsSearchResult
+      <FloatingEventsSearchResult
         query={query}
         isVisible={isExpanded}
       />

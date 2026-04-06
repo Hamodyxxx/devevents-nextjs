@@ -1,19 +1,19 @@
 import { useDebounce } from '@/hooks/use-debounce'
 import { useGetEventsQuery } from '@/hooks/use-get-events-query'
 import React from 'react'
-import { SearchResults } from '../search-results/search-results'
+import { FloatingSearchResults } from '../floating-search-results/floating-search-results'
 import { Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
-interface EventsSearchResultProps {
+interface FloatingEventsSearchResultProps {
     query: string
     isVisible: boolean
 }
 
-export const EventsSearchResult = ({
+export const FloatingEventsSearchResult = ({
     query,
     isVisible = false
-}: EventsSearchResultProps) => {
+}: FloatingEventsSearchResultProps) => {
     const debouncedValue = useDebounce(query);
 
     const { data } = useGetEventsQuery({
@@ -23,7 +23,7 @@ export const EventsSearchResult = ({
     const events = data?.data?.events || [];
 
     return (
-        <SearchResults
+        <FloatingSearchResults
             isVisible={isVisible}
             items={events}
             className=""

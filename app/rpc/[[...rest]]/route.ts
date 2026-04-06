@@ -15,7 +15,6 @@ const handler = new RPCHandler(mainRouter, {
 })
 
 async function handleRequest(request: Request) {
-  console.log(request.url);
   const { response, matched } = await handler.handle(request, {
     prefix: '/rpc',
     context: {

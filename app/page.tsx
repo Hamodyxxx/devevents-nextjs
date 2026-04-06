@@ -3,9 +3,11 @@ import FeaturedEvents from "@/components/featured-events/featured-events";
 import FeaturedEventsSkeleton from "@/components/featured-events/featured-events-skeleton";
 import Heading from "@/components/heading";
 import { orpcClient } from "@/lib/orpc/orpc";
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 
 const Page = async () => {
+
   return (
     <section>
       <Heading className="text-center">
@@ -15,9 +17,7 @@ const Page = async () => {
 
       <ExploreBtn/>
 
-      <Suspense fallback={<FeaturedEventsSkeleton/>}>
-        <FeaturedEvents/>
-      </Suspense>
+      <FeaturedEvents/>
     </section>
   )
 }

@@ -2,6 +2,7 @@ import { cacheLife } from 'next/cache';
 import Image from 'next/image'
 import Link from 'next/link'
 import { SearchEventsBar } from './search-events-bar/search-events-bar';
+import { Suspense } from 'react';
 
 const Navbar = async () => {
   "use cache";
@@ -20,7 +21,10 @@ const Navbar = async () => {
           <p className='text-xl font-bold italic max-sm:hidden'>DevEvent</p>
         </Link>
 
-        <SearchEventsBar/>
+        <Suspense fallback={<div></div>}>
+          <SearchEventsBar/>
+        </Suspense>
+
 
         <ul className= "flex flex-row items-center gap-6">
           {/* <ThemeToggle/> */}
