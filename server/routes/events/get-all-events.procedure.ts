@@ -1,4 +1,5 @@
 import { base } from "@/server/orpc/init";
+import { GetAllEventsInput } from "@/server/schemas/event/event.input.schema";
 import { getAllEventsService } from "@/server/services/events.service";
 import z from "zod";
 
@@ -7,16 +8,7 @@ export const getAllEventsProcedure = base
         path:"/events",
         method: "GET"
     })
-    .input(
-        z.object({
-            q: z.string().default(""),
-            page: z.number().default(1),
-            limit: z.number()
-                .min(1, "limit can not be less than 1.")
-                .max(59, "you can't request more than 59 events per fetch.")
-                .default(10)
-        }).optional()
-    )
+    .input(GetAllEventsInput)
     .handler(async ({
         input,
     }) => {
