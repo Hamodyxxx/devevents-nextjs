@@ -13,7 +13,7 @@ export const useBookEventMutation = ({
     eventSlug,    
     onSuccess,
 }: UseBookEventMutationArgs) => {
-    return useMutation(orpc.bookings.create.mutationOptions({
+    return useMutation(orpc.booking.create.mutationOptions({
         onSuccess: (_, data) => {
             onSuccess?.()
     

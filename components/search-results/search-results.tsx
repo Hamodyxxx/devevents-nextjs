@@ -4,16 +4,19 @@ import { useGetEventsQuery } from "@/hooks/use-get-events-query";
 import GridView from "../grid-view";
 import EventCard from "../event-card/event-card";
 import EventCardSkeleton from "../event-card/event-card-skeleton";
+import { useSearchParams } from "next/navigation";
 
 export const SearchResults = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = useSearchParams();
+
     const query = params.get('q') || "";
+
 
     const { data, isPending } = useGetEventsQuery({
         query: query
     });
 
-    const events = data?.data?.events || [];
+    const events = data?.events || [];
 
     return (
         <div className="space-y-8">

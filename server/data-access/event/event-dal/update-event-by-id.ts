@@ -1,7 +1,7 @@
 import { generateSlug, normalizeDate, normalizeTime } from "@/lib/formatters";
-import { Prisma } from "@/server/prisma/client";
 import { EventDto, mapEventToDto, UpdateEventInput } from "../event-dtos";
 import prisma from "@/lib/db/db";
+import { Prisma } from "@/app/generated/prisma/client";
 
 export async function updateEventById(id: string, patch: UpdateEventInput): Promise<EventDto | null> {
   const data: Prisma.EventUpdateInput = { ...patch } as any;

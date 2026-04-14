@@ -1,4 +1,4 @@
-import { Prisma } from '@/server/prisma/client';
+import { Prisma } from '@/app/generated/prisma/client';
 import { type BookingDto, mapBookingToDto } from '../booking-dtos';
 import prisma from '@/lib/db/db';
 

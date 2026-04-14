@@ -1,5 +1,5 @@
 
-import { Prisma } from '@/server/prisma/client';
+import { Prisma } from '@/app/generated/prisma/client';
 import { BookingDtoSchema, type BookingDto } from './booking.dto';
 
 

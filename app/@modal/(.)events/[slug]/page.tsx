@@ -8,9 +8,7 @@ interface InterceptedEventPageProps {
 
 const InterceptedEventPage =  async ({ params }: InterceptedEventPageProps) => {
   return (
-    <Suspense fallback={<BookEventModalSkeleton/>}>
-      <BookEventModalPageContent slugPromise={params} />
-    </Suspense>
+    <BookEventModalPageContent slugPromise={params} />
   );
 };
 

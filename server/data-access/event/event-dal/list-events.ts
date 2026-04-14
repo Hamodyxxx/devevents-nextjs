@@ -1,4 +1,4 @@
-import { Prisma } from "@/server/prisma/client";
+import { Prisma } from "@/app/generated/prisma/client";
 import { EventDto, mapEventToDto } from "../event-dtos";
 import prisma from "@/lib/db/db";
 

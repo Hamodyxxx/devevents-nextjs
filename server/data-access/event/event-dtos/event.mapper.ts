@@ -1,5 +1,5 @@
 import { EventDtoSchema, type EventDto } from './event.dto';
-import { Prisma } from '@/server/prisma/client';
+import { Prisma } from '@/app/generated/prisma/client';
 
 
 export function mapEventToDto(events: Prisma.EventGetPayload<{}>): EventDto {

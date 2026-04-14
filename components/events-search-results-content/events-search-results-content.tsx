@@ -14,8 +14,8 @@ export const SearchResultsContent = async ({
     
     const queryClient = getQueryClient();
 
-    const data = await orpcClient.events.getAll({ q });
-    const key = orpc.events.getAll.key({ input: { q } });
+    const data = await orpcClient.event.getAll({ q });
+    const key = orpc.event.getAll.key({ input: { q } });
 
     queryClient.setQueryData(key, data);
 

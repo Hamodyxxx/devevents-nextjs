@@ -12,7 +12,7 @@ export const useGetEventsQuery = ({
     page,
     limit
 }: UseGetEventsQueryArgs) => {
-    return useQuery(orpc.events.getAll.queryOptions({
+    return useQuery(orpc.event.getAll.queryOptions({
         input: {
             limit,
             page,

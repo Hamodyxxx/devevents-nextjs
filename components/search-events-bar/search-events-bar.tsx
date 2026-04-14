@@ -1,24 +1,21 @@
 "use client";
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap/gsap-core";
 import { BlurOverlay } from "../ui/blur-over-lay/blur-over-lay";
 import { SearchInput } from "../ui/search-input/search-input";
 import { FloatingEventsSearchResult } from "./floating-events-search-result/floating-events-search-result";
 import { useQueryState } from "nuqs";
-import { useRouter } from "next/navigation";
-import { Route, RouterImplementer } from "@orpc/server";
 
 export const SearchEventsBar = () => {
-  const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
-  const router = useRouter();
-  const [query, setQuery] = useQueryState(
-    "q",
-    { defaultValue: ""}
-  );
-
+  const [, setSearchQuery] = useQueryState("q", {
+    defaultValue: ""
+  });
+  const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
+
+
 
   useGSAP(() => {
     const el = searchRef.current;
@@ -59,14 +56,11 @@ export const SearchEventsBar = () => {
               e.preventDefault();
               
               setIsExpanded(false);
-
-              startTransition(() => { 
-                router.push(`/search?q=${encodeURIComponent(query)}` as any);
-              });
+              setSearchQuery(query);
             }
           },
           value: query,
-          onChange: (e) => setQuery(e.target.value || null),
+          onChange: (e) => setQuery(e.target.value || ""),
         }}
       />
 

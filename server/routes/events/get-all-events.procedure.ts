@@ -10,7 +10,7 @@ export const getAllEventsProcedure = base.event.getAll
         const where: Record<string, any> = {};
 
         if (input?.q) {
-            where.title = { $regex: input?.q, $options: 'i' };
+            where.title = { contains: input?.q };
         }
     
         const eventsRes = await tryCatch(listEvents({
@@ -18,6 +18,8 @@ export const getAllEventsProcedure = base.event.getAll
             limit: input?.limit,
             page: input?.page,
         }));
+
+        console.log(eventsRes.error);
     
         if(eventsRes.error) throw errors.INTERNAL_SERVER_ERROR({
             message: "failed to fetch events"

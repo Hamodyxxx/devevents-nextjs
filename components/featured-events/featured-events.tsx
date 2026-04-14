@@ -10,8 +10,8 @@ const FeaturedEvents = async () => {
     cacheLife("hours");
     cacheTag("featured events");
 
-    const data = await orpcClient.events.getAll();
-    const  events  = data?.data?.events;
+    const data = await orpcClient.event.getAll();
+    const events = data.events;
     
     if(!events) return notFound();
 

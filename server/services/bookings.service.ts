@@ -1,7 +1,7 @@
 import prisma from "@/lib/db/db";
 import { CreateBookingInput } from "../data-access";
-import { Prisma } from "../prisma/client";
 import { BadRequestError } from "@/lib/errors/app-error";
+import { Prisma } from "@/app/generated/prisma/client";
 
 export async function createBookingByEmailService(input: CreateBookingInput){
   const email = input.email.toLowerCase();
