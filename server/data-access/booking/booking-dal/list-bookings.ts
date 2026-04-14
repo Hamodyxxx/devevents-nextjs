@@ -1,15 +1,11 @@
-import Booking from '@/server/database/booking.model';
-
+import { Prisma } from '@/server/prisma/client';
 import { type BookingDto, mapBookingToDto } from '../booking-dtos';
+import prisma from '@/lib/db/db';
 
-/**
- * Retrieve bookings matching the provided filter and map them to `BookingDto`.
- *
- * @param where - MongoDB-style filter object used to select bookings; defaults to `{}` to select all bookings
- * @returns An array of `BookingDto` objects for bookings that match the filter, sorted by `createdAt` descending
- */
-export async function listBookings(where: Record<string, unknown> = {}): Promise<BookingDto[]> {
-  const docs = await Booking.find(where as never).sort({ createdAt: -1 });
+export async function listBookings(where: Prisma.BookingWhereInput = {}): Promise<BookingDto[]> {
+  const docs = await prisma.booking.findMany({
+    where,
+    orderBy: { createdAt: 'desc' },
+  });
   return docs.map(mapBookingToDto);
 }
-

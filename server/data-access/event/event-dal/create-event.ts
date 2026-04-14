@@ -1,21 +1,22 @@
-import Event from '@/server/database/event.model';
 
+import { generateSlug, normalizeDate, normalizeTime } from '@/lib/formatters';
 import {
-  CreateEventInputSchema,
   type CreateEventInput,
   type EventDto,
   mapEventToDto,
 } from '../event-dtos';
+import prisma from '@/lib/db/db';
 
-/**
- * Create a new Event record from the provided input and return its DTO representation.
- *
- * @param input - Properties for the new event; must satisfy the `CreateEventInput` schema
- * @returns The created event represented as an `EventDto`
- */
 export async function createEvent(input: CreateEventInput): Promise<EventDto> {
-  const parsed = CreateEventInputSchema.parse(input);
-  const doc = await Event.create(parsed);
+  const doc = await prisma.event.create({
+    data: {
+      ...input,
+      slug: generateSlug(input.title),
+      date: normalizeDate(input.date),
+      time: normalizeTime(input.time),
+      mode: input.mode,
+    },
+  });
+
   return mapEventToDto(doc);
 }
-

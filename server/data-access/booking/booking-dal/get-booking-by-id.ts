@@ -1,7 +1,5 @@
-import Booking from '@/server/database/booking.model';
-import { ObjectIdStringSchema } from '@/server/data-access/_shared';
-
 import { type BookingDto, mapBookingToDto } from '../booking-dtos';
+import prisma from '@/lib/db/db';
 
 /**
  * Fetches a booking by its ObjectId string and returns the booking as a DTO if found.
@@ -10,8 +8,6 @@ import { type BookingDto, mapBookingToDto } from '../booking-dtos';
  * @returns The matching `BookingDto` if a document is found, `null` otherwise.
  */
 export async function getBookingById(id: string): Promise<BookingDto | null> {
-  const parsedId = ObjectIdStringSchema.parse(id);
-  const doc = await Booking.findById(parsedId);
-  return doc ? mapBookingToDto(doc) : null;
+  const booking = await prisma.booking.findUnique({ where: { id } });
+  return booking ? mapBookingToDto(booking) : null;
 }
-
