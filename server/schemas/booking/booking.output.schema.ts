@@ -1,3 +1,8 @@
-import { BookingSchema } from "./booking.schema";
+import z from "zod";
+import { BookingCoreSchema } from "./booking.schema";
 
-export const BookEventByIdOutput = BookingSchema;
+export const BookingOutputSchema = BookingCoreSchema.extend({
+    id: z.string(),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
+  });

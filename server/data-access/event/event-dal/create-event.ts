@@ -14,7 +14,7 @@ export async function createEvent(input: CreateEventInput): Promise<EventDto> {
       slug: generateSlug(input.title),
       date: normalizeDate(input.date),
       time: normalizeTime(input.time),
-      mode: input.mode,
+      mode: input.mode as any,
     },
   });
 

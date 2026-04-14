@@ -1,18 +1,11 @@
-import { IsoDateTimeStringSchema, ObjectIdStringSchema } from "@/server/data-access";
 import { z } from "zod";
 
-export const BookingSchema = z.object({
-  id: ObjectIdStringSchema,
+export const BookingCoreSchema = z.object({
   eventId: z.string({
     error: "Event ID is required",
   }).min(1, "Event ID cannot be empty"),
-
-  email: z.email({
-    error: "Please provide a valid email address",
-  })
+  
+  email: z.email("Please provide a valid email address")
     .trim()
     .lowercase(),
-    
-  createdAt: IsoDateTimeStringSchema,
-  updatedAt: IsoDateTimeStringSchema,
 });

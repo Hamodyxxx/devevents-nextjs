@@ -1,7 +1,4 @@
-import { ObjectIdStringSchema } from "@/server/data-access";
 import z from "zod";
+import { BookingCoreSchema } from "./booking.schema";
 
-export const BookEventByIdInput = z.object({ 
-    eventId: ObjectIdStringSchema, 
-    email: z.email()
-})
+export const BookEventByIdInputSchema = BookingCoreSchema;

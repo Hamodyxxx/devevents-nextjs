@@ -1,16 +1,8 @@
 import { parseJsonArray } from "@/utils/parse-json-array";
 import { z } from "zod";
-import { EventSchema } from "./event.schema";
+import { EventCoreSchema } from "./event.schema";
 
-
-
-export const CreateEventInput = EventSchema.omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  bookingCount: true,
-  image: true
-}).extend({
+export const CreateEventInputSchema = EventCoreSchema.extend({
   tags: z.string().transform(
     (val) => parseJsonArray(val, "tags")
   ).pipe(

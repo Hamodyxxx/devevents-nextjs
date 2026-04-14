@@ -1,28 +1,32 @@
-import { base } from "@/server/orpc/init";
-import { GetAllEventsInput } from "@/server/schemas/event/event.input.schema";
-import { getAllEventsService } from "@/server/services/events.service";
-import z from "zod";
+import { tryCatch } from "@/lib/try-catch";
+import { listEvents } from "@/server/data-access";
+import { base } from "@/server/orpc";
 
-export const getAllEventsProcedure = base
-    .route({
-        path:"/events",
-        method: "GET"
-    })
-    .input(GetAllEventsInput)
+export const getAllEventsProcedure = base.event.getAll
     .handler(async ({
         input,
+        errors
     }) => {
-        const res = await getAllEventsService({
-            searchQuery: input?.q,
+        const where: Record<string, any> = {};
+
+        if (input?.q) {
+            where.title = { $regex: input?.q, $options: 'i' };
+        }
+    
+        const eventsRes = await tryCatch(listEvents({
+            where: where,
+            limit: input?.limit,
             page: input?.page,
-            limit: input?.limit
+        }));
+    
+        if(eventsRes.error) throw errors.INTERNAL_SERVER_ERROR({
+            message: "failed to fetch events"
         });
 
+        const res = eventsRes.data;
+    
         return {
-            message: "Events Fetched Successfully",
-            data: {
-                events: res.data,
-                hasNextPage: res.hasNextPage
-            }
+            events: res.data,
+            hasNextPage: res.hasNextPage
         }
     })

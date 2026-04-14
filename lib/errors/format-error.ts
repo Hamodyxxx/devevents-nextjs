@@ -8,7 +8,7 @@ export const formatError = (err: AppError) => {
 
 const formatErrorDev = (err: AppError) => {
   return {
-    status: err.status,
+    status: err.statusCode,
     message: err.message,
     stack: err.stack,
     error: err,
@@ -18,7 +18,7 @@ const formatErrorDev = (err: AppError) => {
 const formatErrorProd = (err: AppError) =>  {
   if (err.isOperational) {
     return {
-      status: err.status,
+      status: err.statusCode,
       message: err.message,
     };
   }

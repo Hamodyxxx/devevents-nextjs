@@ -1,46 +1,44 @@
 export class AppError extends Error {
   public readonly statusCode: number;
+  public readonly code: string;
   public readonly isOperational: boolean;
-  public status: "fail" | "error";
 
-  constructor(message: string, statusCode: number, isOperational = true) {
+  constructor(message: string, statusCode: number = 500, code: string = 'INTERNAL_ERROR', isOperational = true) {
     super(message);
-    
+    this.name = this.constructor.name;
     this.statusCode = statusCode;
-    this.status = statusCode >= 400 && statusCode < 500 ? "fail" : "error";
-    this.isOperational = isOperational;
-
-    Object.setPrototypeOf(this, new.target.prototype);
+    this.code = code;
+    this.isOperational = true;
     Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export class BadRequestError extends AppError {
-  constructor(message: string = 'Bad Request') {
-    super(message, 400);
-  }
-}
-
-export class UnauthorizedError extends AppError {
-  constructor(message: string = 'Unauthorized') {
-    super(message, 401);
-  }
-}
-
-export class ForbiddenError extends AppError {
-  constructor(message: string = 'Forbidden') {
-    super(message, 403);
+  constructor(message: string = 'The request is invalid.') {
+    super(message, 400, 'BAD_REQUEST');
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(message: string = 'Resource Not Found') {
-    super(message, 404);
+  constructor(message: string = 'The requested resource was not found.') {
+      super(message, 404, 'NOT_FOUND');
   }
 }
 
-export class InternalServerError extends AppError {
-  constructor(message: string = 'Internal Server Error') {
-    super(message, 500);
+export class ConflictError extends AppError {
+  constructor(message: string = 'A conflict occurred.') {
+      super(message, 409, 'CONFLICT');
+  }
+}
+
+export class UnauthorizedError extends AppError {
+  constructor(message: string = 'Authentication is required.') {
+      super(message, 401, 'UNAUTHORIZED');
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message: string = 'You do not have permission.') {
+      super(message, 403, 'FORBIDDEN');
   }
 }

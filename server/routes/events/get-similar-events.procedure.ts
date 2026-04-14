@@ -1,22 +1,9 @@
-import { base } from "@/server/orpc/init";
-import { getSimilarEventsBySlugService } from "@/server/services/events.service";
-import z from "zod";
+import { base } from "@/server/orpc";
+import { getRelatedEventsService } from "@/server/services/events.service";
 
-export const getSimilarEventsProcedure = base
-    .route({
-        path: "/events/{slug}/similar",
-        method: "GET"
-    })
-    .input(z.object({
-        slug: z.string()
-    }))
+export const getSimilarEventsProcedure = base.event.getSimilarBySlug
     .handler(async ({ input }) => {
-        const events = await getSimilarEventsBySlugService(input.slug);
+        const events = await getRelatedEventsService(input.slug);
 
-        return {
-            message: "Found Similar Events",
-            data: {
-                events
-            }
-        }
+        return events;
     })
