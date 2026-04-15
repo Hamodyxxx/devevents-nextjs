@@ -1,5 +1,3 @@
-import { BASE_URL } from '@/constants/base-url';
-import { IEvent } from '@/server/database';
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation';
 import { cacheLife } from 'next/cache';
@@ -20,8 +18,7 @@ const EventDetailsContent = async({
     cacheLife("hours");
 
     const { slug } = await slugPromise;
-    const data = await orpcClient.events.getBySlug({ slug });
-    const event = data?.data?.event;
+    const event = await orpcClient.event.getBySlug({ slug });
     
     if(!event) return notFound();
 

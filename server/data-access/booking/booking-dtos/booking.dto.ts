@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
-import { IsoDateTimeStringSchema, ObjectIdStringSchema } from '@/server/data-access/_shared';
-
 export const BookingDtoSchema = z.object({
-  id: ObjectIdStringSchema,
-  eventId: ObjectIdStringSchema,
+  id: z.string(),
+  eventId: z.string(),
   email: z.email(),
-  createdAt: IsoDateTimeStringSchema,
-  updatedAt: IsoDateTimeStringSchema,
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 
 export type BookingDto = z.infer<typeof BookingDtoSchema>;

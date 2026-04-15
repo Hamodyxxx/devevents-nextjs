@@ -4,12 +4,5 @@ import { createRouterClient } from "@orpc/server";
 import { headers } from "next/headers";
 
 globalThis.$client = createRouterClient(
-  mainRouter,
-  // {
-  //   context: async () => {
-  //     try {
-  //       return {headers: await getHeaders(),}
-  //     }
-  //   }
-  // }
+  mainRouter
 )

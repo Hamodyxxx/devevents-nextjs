@@ -9,12 +9,13 @@ import { useQueryState } from "nuqs";
 
 export const SearchEventsBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [query, setQuery] = useQueryState(
-    "query",
-    { defaultValue: ""}
-  );
-
+  const [, setSearchQuery] = useQueryState("q", {
+    defaultValue: ""
+  });
+  const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
+
+
 
   useGSAP(() => {
     const el = searchRef.current;
@@ -45,13 +46,21 @@ export const SearchEventsBar = () => {
         className="w-[200px]"
         ref={searchRef}
         inputProps={{
-          onFocus:() => setIsExpanded(true),
-          onBlur:(e) => {
+          onFocus: () => setIsExpanded(true),
+          onBlur: (e) => {
             if (searchRef.current?.contains(e.relatedTarget as Node)) return;
             setIsExpanded(false)
           },
+          onKeyDown: (e) => {
+            if(e.key === "Enter") {
+              e.preventDefault();
+              
+              setIsExpanded(false);
+              setSearchQuery(query);
+            }
+          },
           value: query,
-          onChange: (e) => setQuery(e.target.value || null),
+          onChange: (e) => setQuery(e.target.value || ""),
         }}
       />
 

@@ -1,36 +1,34 @@
-import { base } from "@/server/orpc/init";
-import { getAllEventsService } from "@/server/services/events.service";
-import z from "zod";
+import { tryCatch } from "@/lib/try-catch";
+import { listEvents } from "@/server/data-access";
+import { base } from "@/server/orpc";
 
-export const getAllEventsProcedure = base
-    .route({
-        path:"/events",
-        method: "GET"
-    })
-    .input(
-        z.object({
-            q: z.string().default(""),
-            page: z.number().default(1),
-            limit: z.number()
-                .min(1, "limit can not be less than 1.")
-                .max(59, "you can't request more than 59 events per fetch.")
-                .default(10)
-        }).optional()
-    )
+export const getAllEventsProcedure = base.event.getAll
     .handler(async ({
         input,
+        errors
     }) => {
-        const res = await getAllEventsService({
-            searchQuery: input?.q,
+        const where: Record<string, any> = {};
+
+        if (input?.q) {
+            where.title = { contains: input?.q };
+        }
+    
+        const eventsRes = await tryCatch(listEvents({
+            where: where,
+            limit: input?.limit,
             page: input?.page,
-            limit: input?.limit
+        }));
+
+        console.log(eventsRes.error);
+    
+        if(eventsRes.error) throw errors.INTERNAL_SERVER_ERROR({
+            message: "failed to fetch events"
         });
 
+        const res = eventsRes.data;
+    
         return {
-            message: "Events Fetched Successfully",
-            data: {
-                events: res.data,
-                hasNextPage: res.hasNextPage
-            }
+            events: res.data,
+            hasNextPage: res.hasNextPage
         }
     })

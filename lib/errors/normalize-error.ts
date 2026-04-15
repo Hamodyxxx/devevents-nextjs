@@ -1,32 +1,18 @@
-import { AppError, BadRequestError } from "./app-error";
+import { Prisma } from "@/app/generated/prisma/client";
+import { AppError, ConflictError, NotFoundError } from "./app-error";
 
-export function normalizeError(err: unknown): AppError {
+export function normalizeError(err: unknown) {
   if (err instanceof AppError) return err;
 
-//   if (err instanceof ZodError) {
-//     const message = err.errors.map(e => e.message).join(", ");
-//     return new AppError(`Validation Error: ${message}`, 400);
-//   }
-
-  if (isMongooseCastError(err)) {
-    return new BadRequestError("Invalid ID format");
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === 'P2002') {
+      return new ConflictError("A record with this value already exists.");
+    }
+    if (err.code === 'P2025') {
+      return new NotFoundError("The requested record was not found.");
+    }
   }
 
-  if (isMongoDuplicateKey(err)) {
-    return new BadRequestError("Duplicate field value");
-  }
-
-  if (err instanceof Error) {
-    return new AppError(err.message || "Something went wrong", 500);
-  }
-
-  return new AppError("Unknown error occurred", 500);
-}
-
-function isMongooseCastError(err: any) {
-  return err?.name === "CastError";
-}
-
-function isMongoDuplicateKey(err: any) {
-  return err?.code === 11000;
+  const message = err instanceof Error ? err.message : "An unexpected error occurred";
+  return new AppError(message, 500, 'INTERNAL_SERVER_ERROR');
 }

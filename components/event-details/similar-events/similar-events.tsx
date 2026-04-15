@@ -1,5 +1,3 @@
-import { BASE_URL } from '@/constants/base-url'
-import { IEvent } from '@/server/database';
 import EventCard from '../../event-card/event-card';
 import { cacheLife, cacheTag } from 'next/cache';
 import { orpcClient } from '@/lib/orpc/orpc';
@@ -16,11 +14,10 @@ const SimilarEvents = async ({
     cacheTag(`similar-events-${slug}`)
     cacheLife("hours");
 
-    const data = await orpcClient.events.getSimilar({
+    const events = await orpcClient.event.getSimilarBySlug({
         slug
     });
 
-    const events = data?.data?.events || [];
 
     if (events.length === 0) return null;
 

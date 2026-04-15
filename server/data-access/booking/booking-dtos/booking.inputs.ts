@@ -1,11 +1,9 @@
-import { z } from 'zod';
+import z from "zod";
+import { BookingDtoSchema } from "./booking.dto";
 
-import { ObjectIdStringSchema } from '@/server/data-access/_shared';
-
-export const CreateBookingInputSchema = z.object({
-  eventId: ObjectIdStringSchema,
-  email: z.email(),
+export const CreateBookingInputSchema = BookingDtoSchema.pick({
+  eventId: true,
+  email: true,
 });
 
 export type CreateBookingInput = z.infer<typeof CreateBookingInputSchema>;
-

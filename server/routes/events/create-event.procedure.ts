@@ -1,49 +1,31 @@
-import { EventDtoSchema } from "@/server/data-access";
-import { base,  } from "@/server/orpc/init";
-import { createEventService } from "@/server/services/events.service";
+import { tryCatch } from "@/lib/try-catch";
+import { createEvent } from "@/server/data-access";
+import { base } from "@/server/orpc";
+import { uploadImageToCloudinaryService } from "@/server/services/image.service";
+import { v2 } from "cloudinary";
 import { revalidateTag } from "next/cache";
-import z from "zod";
 
-export const CreateEventProcedureInputSchema = z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
-    overview: z.string().min(1),
-    image: z.instanceof(File),
-    venue: z.string().min(1),
-    location: z.string().min(1),
-    date: z.string().min(1),
-    time: z.string().min(1),
-    mode: z.string().min(1),
-    audience: z.string().min(1),
-    agenda: z.string(),
-    organizer: z.string().min(1),
-    tags: z.string(),
-});
-
-export type CreateEventProcedureInputType = z.infer<typeof CreateEventProcedureInputSchema>;
-
-export const createEventProcedure = base
-    .route({
-        method: "POST",
-        path: "/events"
-    })
-    .input(CreateEventProcedureInputSchema)
-    .output(z.object({
-        message: z.string(),
-        data: z.object({
-            event: EventDtoSchema
-        })
-    }))
+export const createEventProcedure = base.event.create
     .handler(async ({ input }) => {
-        const event = await createEventService(input);
+        const file = input.image as File;
+
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const uploadResult = await uploadImageToCloudinaryService(buffer);
+
+        const {
+            data,
+            error
+        } = await tryCatch(createEvent({
+            ...input,
+            image: uploadResult.secure_url,
+        }));
+
+        if(error) {
+            await v2.uploader.destroy(uploadResult.public_id);
+            throw error;
+        }
 
         revalidateTag("featured events", "hours");
-
-        return {
-            message: "Event created Successfully",
-            data: {
-                event
-            }
-        }
+    
+        return data;
     })
-

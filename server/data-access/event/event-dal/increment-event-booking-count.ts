@@ -1,22 +1,16 @@
-import type { ClientSession } from 'mongoose';
+import { Prisma } from "@/app/generated/prisma/client";
+import { EventDto, mapEventToDto } from "../event-dtos";
+import prisma from "@/lib/db/db";
 
-import Event from '@/server/database/event.model';
-import { ObjectIdStringSchema } from '@/server/data-access/_shared';
-
-import { type EventDto, mapEventToDto } from '../event-dtos';
-
-export async function incrementEventBookingCount(
-  eventId: string,
-  delta: number,
-  session?: ClientSession
-): Promise<EventDto | null> {
-
-  const parsedId = ObjectIdStringSchema.parse(eventId);
-  const doc = await Event.findByIdAndUpdate(
-    parsedId,
-    { $inc: { bookingCount: delta } },
-    { new: true, session }
-  );
-  return doc ? mapEventToDto(doc) : null;
+export async function incrementEventBookingCount(id: string, delta: number): Promise<EventDto | null> {
+  try {
+    const doc = await prisma.event.update({
+      where: { id },
+      data: { bookingCount: { increment: delta } },
+    });
+    return mapEventToDto(doc);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && (error as Prisma.PrismaClientKnownRequestError).code === 'P2025') return null;
+    throw error;
+  }
 }
-

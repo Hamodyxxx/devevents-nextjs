@@ -1,11 +1,10 @@
-import { formatError } from "@/lib/errors/format-error";
-import { normalizeError } from "@/lib/errors/normalize-error";
+import { implement, ORPCError } from "@orpc/server";
 import { ORPCErrorCode } from "@orpc/client";
-import { ORPCError } from "@orpc/server";
-import { os } from "@orpc/server";
+import { contract } from "../contract";
+import { normalizeError } from "@/lib/errors/normalize-error";
+import { formatError } from "@/lib/errors/format-error";
 
-
-function mapHttpStatusToOrpcCode(status: number): ORPCErrorCode {
+function mapHttpStatusToOrpcCode(status: number) {
     if (status === 401) return 'UNAUTHORIZED';
     if (status === 403) return 'FORBIDDEN';
     if (status === 404) return 'NOT_FOUND';
@@ -15,7 +14,9 @@ function mapHttpStatusToOrpcCode(status: number): ORPCErrorCode {
     return 'INTERNAL_SERVER_ERROR';
 }
 
-export const errorHandlerMiddleware = os.middleware(async ({ next }) => {
+const os = implement(contract);
+
+export const errorHandlerMiddleware = os.middleware(async ({ next, errors }) => {
     try {
         return await next();
     } catch (err) {
@@ -26,10 +27,9 @@ export const errorHandlerMiddleware = os.middleware(async ({ next }) => {
         const formatted = formatError(normalized);
         
         const orpcCode = mapHttpStatusToOrpcCode(normalized.statusCode);
-
-        throw new ORPCError(orpcCode, {
-            message: formatted.message,
-            data: formatted,
-        });
+        
+        throw errors[orpcCode]({
+            data: formatted
+        })
     }
 });
