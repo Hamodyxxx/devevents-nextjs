@@ -4,10 +4,10 @@ import { ObjectIdStringSchema } from '@/data-access/_shared';
 import { type EventDto, mapEventToDto } from '../event-dtos';
 
 /**
- * Retrieves an Event by its MongoDB ObjectId and returns it as an EventDto.
+ * Fetches an Event by its string ObjectId and returns a mapped representation.
  *
- * @param id - The string representation of the Event's MongoDB ObjectId.
- * @returns The matching Event as an `EventDto`, or `null` if no document is found.
+ * @param id - The Event's MongoDB ObjectId as a string
+ * @returns The matching Event as an `EventDto`, `null` if no document is found
  */
 export async function getEventById(id: string): Promise<EventDto | null> {
   const parsedId = ObjectIdStringSchema.parse(id);

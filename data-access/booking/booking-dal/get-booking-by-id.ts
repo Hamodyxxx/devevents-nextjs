@@ -4,10 +4,10 @@ import { ObjectIdStringSchema } from '@/data-access/_shared';
 import { type BookingDto, mapBookingToDto } from '../booking-dtos';
 
 /**
- * Fetches a booking by its ObjectId string and returns the booking as a DTO if found.
+ * Retrieve a booking by its MongoDB ObjectId string.
  *
- * @param id - String representation of the booking's MongoDB ObjectId; this value is validated and parsed before lookup.
- * @returns The matching `BookingDto` if a document is found, `null` otherwise.
+ * @param id - The booking's MongoDB ObjectId as a string
+ * @returns The matching `BookingDto` if found, `null` otherwise.
  */
 export async function getBookingById(id: string): Promise<BookingDto | null> {
   const parsedId = ObjectIdStringSchema.parse(id);

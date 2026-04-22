@@ -4,9 +4,9 @@ import { ObjectIdStringSchema } from '@/data-access/_shared';
 import { type BookingDto, mapBookingToDto } from '../booking-dtos';
 
 /**
- * Retrieve bookings for the specified event, ordered by creation time descending.
+ * Get bookings for the specified event ordered by creation time, newest first.
  *
- * @param eventId - The event identifier as a MongoDB ObjectId string (will be validated/parsed)
+ * @param eventId - The event identifier as a MongoDB ObjectId string
  * @returns An array of `BookingDto` objects for the event, sorted newest first by `createdAt`
  */
 export async function listBookingsByEvent(eventId: string): Promise<BookingDto[]> {
